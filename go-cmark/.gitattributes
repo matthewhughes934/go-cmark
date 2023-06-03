@@ -1,0 +1,5 @@
+# tell GitHub to ignore these files when determining
+# repo language
+*.c     linguist-vendored
+*.h     linguist-vendored
+*.inc   linguist-vendored
