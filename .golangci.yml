@@ -1,0 +1,28 @@
+run:
+  tests: true
+  skip-dirs:
+    - cmark
+
+linters-settings:
+  errcheck:
+    check-type-assertions: true
+    check-blank: true
+  govet:
+    check-shadowing: false
+  revive:
+    rules:
+      - name: exported
+        disabled: true
+
+linters:
+  enable:
+    - revive
+    - misspell
+    - nakedret
+    - gas
+    - unconvert
+    - unparam
+    - prealloc
+    - goimports
+    - gofumpt
+    - gci
