@@ -1,4 +1,4 @@
-module example.com/go-cmark
+module github.com/matthewhughes934/go-cmark
 
 go 1.20
 
