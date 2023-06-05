@@ -118,7 +118,7 @@ func (node *Node) free() {
 	C.cmark_node_free(node.node)
 }
 
-// GetType returns the type of 'node' or 'NodeTypeNone' on failure
+// GetType returns the type of 'node' or [NodeTypeNone] on failure
 func (node *Node) GetType() NodeType {
 	return NodeType(C.cmark_node_get_type(node.node))
 }
@@ -150,8 +150,8 @@ func (node *Node) GetHeadingLevel() int {
 }
 
 // GetListType wraps cmark_node_get_list_type
-// Returns the list delimiter type of 'node', or `CMARK_NO_DELIM` if 'node'
-// or NO_LIST if 'node' is not a list
+// Returns the list delimiter type of 'node', or [TypeNoList] if 'node'
+// is not a list
 func (node *Node) GetListType() ListType {
 	return ListType(C.cmark_node_get_list_type(node.node))
 }
@@ -207,7 +207,7 @@ func (node *Node) GetEndColumn() int {
 }
 
 // Next wraps cmark_node_next
-// Returns the next node in the sequence after 'node', or nill if
+// Returns the next node in the sequence after 'node', or nil if
 // there is none
 func (node *Node) Next() *Node {
 	next := C.cmark_node_next(node.node)
@@ -239,7 +239,7 @@ func (node *Node) Parent() *Node {
 }
 
 // FirstChild wraps cmark_node_first_child
-// Returns the first child of 'node', or nill if 'node' has no children.
+// Returns the first child of 'node', or nil if 'node' has no children.
 func (node *Node) FirstChild() *Node {
 	firstChild := C.cmark_node_first_child(node.node)
 	if firstChild == nil {
@@ -249,7 +249,7 @@ func (node *Node) FirstChild() *Node {
 }
 
 // LastChild wraps cmark_node_last_child
-// Returns the last child of 'node', or NULL if 'node' has no children.
+// Returns the last child of 'node', or nil if 'node' has no children.
 func (node *Node) LastChild() *Node {
 	lastChild := C.cmark_node_last_child(node.node)
 	if lastChild == nil {
