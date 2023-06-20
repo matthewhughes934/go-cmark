@@ -264,6 +264,7 @@ func TestGetURL(t *testing.T) {
 		{"<https://example.com>", "https://example.com"},
 		{"[link here](https://example.com)", "https://example.com"},
 		{"[link here]()", ""},
+		{`![alt-name](https://example.com/image.png "some-title")`, "https://example.com/image.png"},
 	} {
 		t.Run(tc.content, func(t *testing.T) {
 			document := ParseDocument(tc.content, OptDefault)
