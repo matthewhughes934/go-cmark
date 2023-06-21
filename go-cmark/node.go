@@ -182,6 +182,20 @@ func (node *Node) GetUrl() *string {
 	return &str
 }
 
+// GetTitle wraps cmark_node_get_title
+// returns the title of a link or image 'node', or an empty string
+// if no URL is set. Returns nil if called on a node that is not a
+// link or image
+func (node *Node) GetTitle() *string {
+	literal := C.cmark_node_get_title(node.node)
+	if literal == nil {
+		return nil
+	}
+
+	str := C.GoString(literal)
+	return &str
+}
+
 // GetStartLine wraps cmark_node_get_start_line
 // Returns the line at which 'node' begins.
 func (node *Node) GetStartLine() int {

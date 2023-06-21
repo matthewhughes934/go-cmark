@@ -276,6 +276,42 @@ func TestGetURL(t *testing.T) {
 	}
 }
 
+func TestGetTitleNoTitle(t *testing.T) {
+	for _, content := range []string{
+		"paragraph",
+		"# heading",
+		"* list point",
+	} {
+		t.Run(content, func(t *testing.T) {
+			document := ParseDocument(content, OptDefault)
+
+			linkNode := document.FirstChild().FirstChild()
+
+			require.Nil(t, linkNode.GetTitle())
+		})
+	}
+}
+
+func TestGetTitle(t *testing.T) {
+	for _, tc := range []struct {
+		content  string
+		expected string
+	}{
+		{"<https://example.com>", ""},
+		{`[link text](https://example.com "link here")`, "link here"},
+		{`[](/link "hmm")`, "hmm"},
+		{`![alt-name](https://example.com/image.png "some title")`, "some title"},
+	} {
+		t.Run(tc.content, func(t *testing.T) {
+			document := ParseDocument(tc.content, OptDefault)
+
+			linkNode := document.FirstChild().FirstChild()
+
+			require.Equal(t, tc.expected, *linkNode.GetTitle())
+		})
+	}
+}
+
 func TestNodePositionFunctions(t *testing.T) {
 	content := "# heading\nparagraph that\nlasts\nseveral\nlines\n"
 
