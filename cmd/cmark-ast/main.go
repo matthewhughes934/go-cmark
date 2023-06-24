@@ -16,7 +16,7 @@ import (
 	"github.com/matthewhughes934/go-cmark/pkg/cmark"
 )
 
-func main() {
+func main() { //go-cov:skip
 	if err := cmarkAST(os.Args); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)

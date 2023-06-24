@@ -114,7 +114,7 @@ func NewNode(nt NodeType) *Node {
 
 // Free wraps cmark_node_free
 // Frees the memory allocated for a node and any children.
-func (node *Node) free() {
+func (node *Node) free() { //go-cov:skip
 	C.cmark_node_free(node.node)
 }
 

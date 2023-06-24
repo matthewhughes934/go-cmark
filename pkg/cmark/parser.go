@@ -16,7 +16,7 @@ type Parser struct {
 }
 
 // free wraps cmark_parser_free
-func (parser *Parser) free() {
+func (parser *Parser) free() { //go-cov:skip
 	C.cmark_parser_free(parser.parser)
 }
 

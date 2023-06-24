@@ -13,7 +13,8 @@ func TestIterAPI(t *testing.T) {
 	// step into document
 	require.Equal(t, EventTypeEnter, iter.Next())
 	require.Equal(t, EventTypeEnter, iter.GetEventType())
-	require.Equal(t, NodeTypeDocument, iter.GetNode().GetType())
+	rootNode := iter.GetNode()
+	require.Equal(t, NodeTypeDocument, rootNode.GetType())
 
 	// step into heading
 	require.Equal(t, EventTypeEnter, iter.Next())
@@ -45,4 +46,6 @@ func TestIterAPI(t *testing.T) {
 
 	// done
 	require.Equal(t, EventTypeDone, iter.Next())
+
+	require.Equal(t, iter.GetRoot(), rootNode)
 }

@@ -32,7 +32,7 @@ func NewIter(root *Node) *Iter {
 }
 
 // free wraps cmark_iter_free
-func (iter *Iter) free() {
+func (iter *Iter) free() { //go-cov:skip
 	C.cmark_iter_free(iter.iter)
 }
 
