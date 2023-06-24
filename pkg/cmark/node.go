@@ -54,8 +54,8 @@ type ListType int
 
 const (
 	TypeNoList      ListType = C.CMARK_NO_LIST
-	TypeBulletList           = C.CMARK_BULLET_LIST
-	TypeOrderedList          = C.CMARK_ORDERED_LIST
+	TypeBulletList  ListType = C.CMARK_BULLET_LIST
+	TypeOrderedList ListType = C.CMARK_ORDERED_LIST
 )
 
 // DelimType is cmark_delim_type
@@ -63,8 +63,8 @@ type DelimType int
 
 const (
 	TypeNoDelim     DelimType = C.CMARK_NO_DELIM
-	TypePeriodDelim           = C.CMARK_PERIOD_DELIM
-	TypeParentDelim           = C.CMARK_PAREN_DELIM
+	TypePeriodDelim DelimType = C.CMARK_PERIOD_DELIM
+	TypeParentDelim DelimType = C.CMARK_PAREN_DELIM
 )
 
 type ParserOpt int
@@ -74,30 +74,30 @@ const (
 	OptDefault ParserOpt = C.CMARK_OPT_DEFAULT
 
 	// Include a `data-sourcepos` attribute on all block elements.
-	OptSourcePos = C.CMARK_OPT_SOURCEPOS
+	OptSourcePos ParserOpt = C.CMARK_OPT_SOURCEPOS
 
 	// Render `softbreak` elements as hard line breaks.
-	OptHardBreaks = C.CMARK_OPT_HARDBREAKS
+	OptHardBreaks ParserOpt = C.CMARK_OPT_HARDBREAKS
 
 	//  Render raw HTML and unsafe links (`javascript:`, `vbscript:`,
 	// `file:`, and `data:`, except for `image/png`, `image/gif`,
 	// `image/jpeg`, or `image/webp` mime types).  By default,
 	// raw HTML is replaced by a placeholder HTML comment. Unsafe
 	// links are replaced by empty strings.
-	OptUnsafe = C.CMARK_OPT_UNSAFE
+	OptUnsafe ParserOpt = C.CMARK_OPT_UNSAFE
 
 	// Render `softbreak` elements as spaces.
-	OptNoBreaks = C.CMARK_OPT_NOBREAKS
+	OptNoBreaks ParserOpt = C.CMARK_OPT_NOBREAKS
 
 	// Legacy option (no effect).
-	OptNormalize = C.CMARK_OPT_NORMALIZE
+	OptNormalize ParserOpt = C.CMARK_OPT_NORMALIZE
 
 	//  Validate UTF-8 in the input before parsing, replacing illegal
 	// sequences with the replacement character U+FFFD.
-	OptValidateUTF8 = C.CMARK_OPT_VALIDATE_UTF8
+	OptValidateUTF8 ParserOpt = C.CMARK_OPT_VALIDATE_UTF8
 
 	// Convert straight quotes to curly, --- to em dashes, -- to en dashes.
-	OptSmart = C.CMARK_OPT_SMART
+	OptSmart ParserOpt = C.CMARK_OPT_SMART
 )
 
 type Node struct {
