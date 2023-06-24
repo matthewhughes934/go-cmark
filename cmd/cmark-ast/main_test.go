@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"io"
 	"os"
 	"path"
@@ -70,16 +69,6 @@ func TestHappyPath(t *testing.T) {
 			require.NoError(t, err)
 		})
 	}
-}
-
-func TestErrorsOnTooFewArgs(t *testing.T) {
-	progName := "cmarktest"
-	expectedError := fmt.Sprintf("Usage: %s <markdown-file>", progName)
-
-	gotOut, err := runTest(t, "cmarktest")
-
-	require.Equal(t, "", gotOut)
-	require.EqualError(t, err, expectedError)
 }
 
 func TestErrorsOnUnreadableFile(t *testing.T) {

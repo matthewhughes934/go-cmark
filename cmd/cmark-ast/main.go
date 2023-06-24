@@ -3,7 +3,9 @@ cmark-ast prints the nodes making up a markdown file
 
 Usage:
 
-	cmark-ast <markdown-file>
+	cmark-ast [ markdown-file ]
+
+If no file is provided, reads from "/dev/stdin"
 */
 package main
 
@@ -22,11 +24,14 @@ func main() {
 }
 
 func cmarkAST(args []string) error {
+	var filename string
 	if len(args) != 2 {
-		return fmt.Errorf("Usage: %s <markdown-file>", args[0])
+		filename = "/dev/stdin"
+	} else {
+		filename = args[1]
 	}
 
-	content, err := os.ReadFile(args[1])
+	content, err := os.ReadFile(filename)
 	if err != nil {
 		return fmt.Errorf("Error reading file %s: %v", args[1], err)
 	}
