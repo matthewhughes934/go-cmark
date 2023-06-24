@@ -13,7 +13,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/matthewhughes934/go-cmark/go-cmark"
+	"github.com/matthewhughes934/go-cmark/pkg/cmark"
 )
 
 func main() {
