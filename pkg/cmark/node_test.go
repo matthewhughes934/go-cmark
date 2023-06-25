@@ -10,7 +10,7 @@ import (
 func TestParseSimpleDocument(t *testing.T) {
 	document := "# My Document\n\nthis is a great document!\n"
 
-	got := ParseDocument(document, OptDefault)
+	got := ParseDocument(document, ParserOptDefault)
 	require.NotNil(t, got)
 
 	assert.Equal(t, NodeTypeDocument, got.GetType())
@@ -65,7 +65,7 @@ func TestGetLiteralNoContent(t *testing.T) {
 
 func TestGetLiteralWithContent(t *testing.T) {
 	content := "# heading\n"
-	document := ParseDocument(content, OptDefault)
+	document := ParseDocument(content, ParserOptDefault)
 	require.NotNil(t, document)
 	heading := document.FirstChild()
 	require.NotNil(t, heading)
@@ -76,14 +76,14 @@ func TestGetLiteralWithContent(t *testing.T) {
 }
 
 func TestNodeFirstChildNoChild(t *testing.T) {
-	got := ParseDocument("", OptDefault)
+	got := ParseDocument("", ParserOptDefault)
 	require.NotNil(t, got)
 
 	assert.Nil(t, got.FirstChild())
 }
 
 func TestNodeFirstChild(t *testing.T) {
-	got := ParseDocument("# heading\n", OptDefault)
+	got := ParseDocument("# heading\n", ParserOptDefault)
 	require.NotNil(t, got)
 
 	firstChild := got.FirstChild()
@@ -92,13 +92,13 @@ func TestNodeFirstChild(t *testing.T) {
 }
 
 func TestLastChildNoChild(t *testing.T) {
-	document := ParseDocument("", OptDefault)
+	document := ParseDocument("", ParserOptDefault)
 
 	assert.Nil(t, document.LastChild())
 }
 
 func TestLastChild(t *testing.T) {
-	document := ParseDocument("# heading\n\nparagraph\n", OptDefault)
+	document := ParseDocument("# heading\n\nparagraph\n", ParserOptDefault)
 
 	lastChild := document.LastChild()
 	require.NotNil(t, lastChild)
@@ -106,14 +106,14 @@ func TestLastChild(t *testing.T) {
 }
 
 func TestNodeNextNoNext(t *testing.T) {
-	document := ParseDocument("", OptDefault)
+	document := ParseDocument("", ParserOptDefault)
 	require.NotNil(t, document)
 
 	assert.Nil(t, document.Next())
 }
 
 func TestNodeNext(t *testing.T) {
-	document := ParseDocument("first paragraph\n\nsecond paragraph\n", OptDefault)
+	document := ParseDocument("first paragraph\n\nsecond paragraph\n", ParserOptDefault)
 
 	firstParagraph := document.FirstChild()
 	require.Equal(t, NodeTypeParagraph, firstParagraph.GetType())
@@ -125,14 +125,14 @@ func TestNodeNext(t *testing.T) {
 }
 
 func TestNodePreviousNoPrevious(t *testing.T) {
-	document := ParseDocument("", OptDefault)
+	document := ParseDocument("", ParserOptDefault)
 	require.NotNil(t, document)
 
 	assert.Nil(t, document.Previous())
 }
 
 func TestNodePrevious(t *testing.T) {
-	document := ParseDocument("first paragraph\n\nsecond paragraph\n", OptDefault)
+	document := ParseDocument("first paragraph\n\nsecond paragraph\n", ParserOptDefault)
 
 	secondParagraph := document.FirstChild().Next()
 	require.Equal(t, NodeTypeParagraph, secondParagraph.GetType())
@@ -144,14 +144,14 @@ func TestNodePrevious(t *testing.T) {
 }
 
 func TestNodeParentNoParent(t *testing.T) {
-	document := ParseDocument("", OptDefault)
+	document := ParseDocument("", ParserOptDefault)
 	require.NotNil(t, document)
 
 	assert.Nil(t, document.Parent())
 }
 
 func TestNodeParent(t *testing.T) {
-	document := ParseDocument("# heading\n", OptDefault)
+	document := ParseDocument("# heading\n", ParserOptDefault)
 
 	heading := document.FirstChild()
 	require.NotNil(t, heading)
@@ -162,7 +162,7 @@ func TestNodeParent(t *testing.T) {
 }
 
 func TestGetHeadingLevelNotHeading(t *testing.T) {
-	document := ParseDocument("", OptDefault)
+	document := ParseDocument("", ParserOptDefault)
 
 	require.Equal(t, 0, document.GetHeadingLevel())
 }
@@ -176,7 +176,7 @@ func TestGetHeadingLevel(t *testing.T) {
 		{"## heading", 2},
 	} {
 		t.Run(tc.heading, func(t *testing.T) {
-			document := ParseDocument(tc.heading+"\n", OptDefault)
+			document := ParseDocument(tc.heading+"\n", ParserOptDefault)
 
 			heading := document.FirstChild()
 			require.NotNil(t, heading)
@@ -196,7 +196,7 @@ func TestGetListType(t *testing.T) {
 		{"1. foo\n2. bar", TypeOrderedList},
 	} {
 		t.Run(tc.content, func(t *testing.T) {
-			document := ParseDocument(tc.content+"\n", OptDefault)
+			document := ParseDocument(tc.content+"\n", ParserOptDefault)
 
 			list := document.FirstChild()
 			require.NotNil(t, list)
@@ -217,7 +217,7 @@ func TestGetListStart(t *testing.T) {
 		{"2. foo\n3. bar", 2},
 	} {
 		t.Run(tc.content, func(t *testing.T) {
-			document := ParseDocument(tc.content+"\n", OptDefault)
+			document := ParseDocument(tc.content+"\n", ParserOptDefault)
 
 			list := document.FirstChild()
 			require.NotNil(t, list)
@@ -237,7 +237,7 @@ func TestIsTightList(t *testing.T) {
 		{"* tight\n*list", true},
 	} {
 		t.Run(tc.content, func(t *testing.T) {
-			document := ParseDocument(tc.content+"\n", OptDefault)
+			document := ParseDocument(tc.content+"\n", ParserOptDefault)
 
 			list := document.FirstChild()
 			require.NotNil(t, list)
@@ -248,7 +248,7 @@ func TestIsTightList(t *testing.T) {
 }
 
 func TestGetUrlNoUrl(t *testing.T) {
-	document := ParseDocument("No URL here\n", OptDefault)
+	document := ParseDocument("No URL here\n", ParserOptDefault)
 
 	content := document.FirstChild()
 	require.NotNil(t, content)
@@ -267,7 +267,7 @@ func TestGetURL(t *testing.T) {
 		{`![alt-name](https://example.com/image.png "some-title")`, "https://example.com/image.png"},
 	} {
 		t.Run(tc.content, func(t *testing.T) {
-			document := ParseDocument(tc.content, OptDefault)
+			document := ParseDocument(tc.content, ParserOptDefault)
 
 			linkNode := document.FirstChild().FirstChild()
 
@@ -283,7 +283,7 @@ func TestGetTitleNoTitle(t *testing.T) {
 		"* list point",
 	} {
 		t.Run(content, func(t *testing.T) {
-			document := ParseDocument(content, OptDefault)
+			document := ParseDocument(content, ParserOptDefault)
 
 			linkNode := document.FirstChild().FirstChild()
 
@@ -303,7 +303,7 @@ func TestGetTitle(t *testing.T) {
 		{`![alt-name](https://example.com/image.png "some title")`, "some title"},
 	} {
 		t.Run(tc.content, func(t *testing.T) {
-			document := ParseDocument(tc.content, OptDefault)
+			document := ParseDocument(tc.content, ParserOptDefault)
 
 			linkNode := document.FirstChild().FirstChild()
 
@@ -315,7 +315,7 @@ func TestGetTitle(t *testing.T) {
 func TestNodePositionFunctions(t *testing.T) {
 	content := "# heading\nparagraph that\nlasts\nseveral\nlines\n"
 
-	document := ParseDocument(content, OptDefault)
+	document := ParseDocument(content, ParserOptDefault)
 
 	headingNode := document.FirstChild()
 	require.NotNil(t, headingNode)

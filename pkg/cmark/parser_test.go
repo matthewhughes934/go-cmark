@@ -9,7 +9,7 @@ import (
 )
 
 func TestParserAPI(t *testing.T) {
-	parser := NewParser(OptDefault)
+	parser := NewParser(ParserOptDefault)
 	document := "# heading\n\nparagraph here\n"
 
 	scanner := bufio.NewScanner(strings.NewReader(document))

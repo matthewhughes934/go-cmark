@@ -71,33 +71,33 @@ type ParserOpt int
 
 const (
 	// Default options.
-	OptDefault ParserOpt = C.CMARK_OPT_DEFAULT
+	ParserOptDefault ParserOpt = C.CMARK_OPT_DEFAULT
 
 	// Include a `data-sourcepos` attribute on all block elements.
-	OptSourcePos ParserOpt = C.CMARK_OPT_SOURCEPOS
+	ParserOptSourcePos ParserOpt = C.CMARK_OPT_SOURCEPOS
 
 	// Render `softbreak` elements as hard line breaks.
-	OptHardBreaks ParserOpt = C.CMARK_OPT_HARDBREAKS
+	ParserOptHardBreaks ParserOpt = C.CMARK_OPT_HARDBREAKS
 
 	//  Render raw HTML and unsafe links (`javascript:`, `vbscript:`,
 	// `file:`, and `data:`, except for `image/png`, `image/gif`,
 	// `image/jpeg`, or `image/webp` mime types).  By default,
 	// raw HTML is replaced by a placeholder HTML comment. Unsafe
 	// links are replaced by empty strings.
-	OptUnsafe ParserOpt = C.CMARK_OPT_UNSAFE
+	ParserOptUnsafe ParserOpt = C.CMARK_OPT_UNSAFE
 
 	// Render `softbreak` elements as spaces.
-	OptNoBreaks ParserOpt = C.CMARK_OPT_NOBREAKS
+	ParserOptNoBreaks ParserOpt = C.CMARK_OPT_NOBREAKS
 
 	// Legacy option (no effect).
-	OptNormalize ParserOpt = C.CMARK_OPT_NORMALIZE
+	ParserOptNormalize ParserOpt = C.CMARK_OPT_NORMALIZE
 
 	//  Validate UTF-8 in the input before parsing, replacing illegal
 	// sequences with the replacement character U+FFFD.
-	OptValidateUTF8 ParserOpt = C.CMARK_OPT_VALIDATE_UTF8
+	ParserOptValidateUTF8 ParserOpt = C.CMARK_OPT_VALIDATE_UTF8
 
 	// Convert straight quotes to curly, --- to em dashes, -- to en dashes.
-	OptSmart ParserOpt = C.CMARK_OPT_SMART
+	ParserOptSmart ParserOpt = C.CMARK_OPT_SMART
 )
 
 type Node struct {

@@ -7,7 +7,7 @@ import (
 )
 
 func TestIterAPI(t *testing.T) {
-	root := ParseDocument("# heading\n\nparagraph\n", OptDefault)
+	root := ParseDocument("# heading\n\nparagraph\n", ParserOptDefault)
 	iter := NewIter(root)
 
 	// step into document
