@@ -36,7 +36,7 @@ func cmarkAST(args []string) error {
 		return fmt.Errorf("Error reading file %s: %v", args[1], err)
 	}
 
-	dumpTree(cmark.ParseDocument(string(content), cmark.OptDefault), 0)
+	dumpTree(cmark.ParseDocument(string(content), cmark.ParserOptDefault), 0)
 	return nil
 }
 
