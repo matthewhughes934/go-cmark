@@ -1,6 +1,7 @@
 package gfm
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -329,4 +330,32 @@ func TestNodePositionFunctions(t *testing.T) {
 	assert.Equal(t, 5, paragraphNode.GetEndLine())
 	assert.Equal(t, 1, paragraphNode.GetStartColumn())
 	assert.Equal(t, 5, paragraphNode.GetEndColumn())
+}
+
+func ExampleParseDocument() {
+	document := "# My great document\n\nWhat a great read!\n"
+	root := ParseDocument(document, ParserOptDefault)
+
+	heading := root.FirstChild()
+	headingContent := heading.FirstChild()
+
+	paragraph := heading.Next()
+	paragraphContent := paragraph.FirstChild()
+
+	fmt.Println(root.GetTypeString())
+	fmt.Println(heading.GetTypeString())
+	fmt.Println(headingContent.GetType() == NodeTypeText)
+	fmt.Println(*headingContent.GetLiteral())
+	fmt.Println(paragraph.GetTypeString())
+	fmt.Println(paragraphContent.GetType() == NodeTypeText)
+	fmt.Println(*paragraphContent.GetLiteral())
+
+	// Output:
+	// document
+	// heading
+	// true
+	// My great document
+	// paragraph
+	// true
+	// What a great read!
 }

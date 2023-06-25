@@ -274,8 +274,10 @@ func (node *Node) LastChild() *Node {
 }
 
 // ParseDocument wraps cmark_parse_document
-// Parse a CommonMark document in 'document'
-// Returns a pointer to a tree of nodes.
+// Parse a CommonMark document in 'document' and returns a pointer to a tree of nodes.
+// The returned [cmark.Node] has a finalizer set that will call
+// `cmark_node_free` which will free the memory allocated for the node and any
+// of its children
 func ParseDocument(document string, options ParserOpt) *Node {
 	str := C.CString(document)
 	defer C.free(unsafe.Pointer(str))
