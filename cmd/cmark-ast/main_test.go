@@ -72,11 +72,8 @@ func TestHappyPath(t *testing.T) {
 }
 
 func TestErrorsOnUnreadableFile(t *testing.T) {
-	markdownPath := path.Join(t.TempDir(), "file.md")
+	markdownPath := t.TempDir()
 	expectedErrorPrefix := "Error reading file " + markdownPath
-	file, err := os.Create(markdownPath)
-	require.NoError(t, err)
-	require.NoError(t, file.Chmod(0o222))
 
 	gotOut, err := runTest(t, "cmarktest", markdownPath)
 
