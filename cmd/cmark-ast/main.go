@@ -25,7 +25,7 @@ func main() { //go-cov:skip
 
 func cmarkAST(args []string) error {
 	var filename string
-	if len(args) != 2 {
+	if len(args) != 2 { //go-cov:skip
 		filename = "/dev/stdin"
 	} else {
 		filename = args[1]
