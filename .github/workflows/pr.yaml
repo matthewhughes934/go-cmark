@@ -20,7 +20,14 @@ jobs:
         with:
           go-version: ${{ matrix.go_version }}
       - name: run tests
-        run: go test ./...
+        run: go test -coverprofile cov.out ./...
+      - name: report coverage
+        shell: bash
+        run: |
+          awk '
+          BEGIN {fail = 0}
+          NR > 1 && $NF == 0 { fail = 1; printf("bad line: %s\n", $0) }
+          END { if (fail) { exit(1) } }'
   lint:
     runs-on: ubuntu-latest
     steps:

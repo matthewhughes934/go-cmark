@@ -5,6 +5,7 @@ go 1.20
 require (
 	github.com/golangci/golangci-lint v1.53.3
 	github.com/stretchr/testify v1.8.4
+	gitlab.com/matthewhughes/go-cov v0.2.0
 )
 
 require (
