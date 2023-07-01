@@ -22,13 +22,12 @@ jobs:
       - name: run tests
         run: go test -coverprofile cov.out ./...
       - name: report coverage
+        shell: bash
         run: |
-          uncovered_lines="$(awk 'NR>1 && $NF==0 {print $1}' <(go-cov cov.out))"
-          if [ -n "$uncovered_lines" ]
-          then
-            printf "uncovered lines\n$uncovered_lines" >&2
-            exit 1
-          fi
+          awk '
+          BEGIN {fail = 0}
+          NR > 1 && $NF == 0 { fail = 1; printf("bad line: %s\n", $0) }
+          END { if (fail) { exit(1) } }'
   lint:
     runs-on: ubuntu-latest
     steps:
