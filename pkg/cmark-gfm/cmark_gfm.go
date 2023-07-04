@@ -4,7 +4,7 @@
 package gfm
 
 /*
-#include "cmark.h"
+#include "cmark-gfm.h"
 #include <stdlib.h>
 */
 import "C"
