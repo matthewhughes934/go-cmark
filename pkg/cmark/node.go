@@ -8,7 +8,6 @@ import "C"
 
 import (
 	"runtime"
-	"unsafe"
 )
 
 // NodeType is cmark_node_type
@@ -65,39 +64,6 @@ const (
 	TypeNoDelim     DelimType = C.CMARK_NO_DELIM
 	TypePeriodDelim DelimType = C.CMARK_PERIOD_DELIM
 	TypeParentDelim DelimType = C.CMARK_PAREN_DELIM
-)
-
-type ParserOpt int
-
-const (
-	// Default options.
-	ParserOptDefault ParserOpt = C.CMARK_OPT_DEFAULT
-
-	// Include a `data-sourcepos` attribute on all block elements.
-	ParserOptSourcePos ParserOpt = C.CMARK_OPT_SOURCEPOS
-
-	// Render `softbreak` elements as hard line breaks.
-	ParserOptHardBreaks ParserOpt = C.CMARK_OPT_HARDBREAKS
-
-	//  Render raw HTML and unsafe links (`javascript:`, `vbscript:`,
-	// `file:`, and `data:`, except for `image/png`, `image/gif`,
-	// `image/jpeg`, or `image/webp` mime types).  By default,
-	// raw HTML is replaced by a placeholder HTML comment. Unsafe
-	// links are replaced by empty strings.
-	ParserOptUnsafe ParserOpt = C.CMARK_OPT_UNSAFE
-
-	// Render `softbreak` elements as spaces.
-	ParserOptNoBreaks ParserOpt = C.CMARK_OPT_NOBREAKS
-
-	// Legacy option (no effect).
-	ParserOptNormalize ParserOpt = C.CMARK_OPT_NORMALIZE
-
-	//  Validate UTF-8 in the input before parsing, replacing illegal
-	// sequences with the replacement character U+FFFD.
-	ParserOptValidateUTF8 ParserOpt = C.CMARK_OPT_VALIDATE_UTF8
-
-	// Convert straight quotes to curly, --- to em dashes, -- to en dashes.
-	ParserOptSmart ParserOpt = C.CMARK_OPT_SMART
 )
 
 type Node struct {
@@ -271,21 +237,4 @@ func (node *Node) LastChild() *Node {
 	}
 
 	return &Node{node: lastChild}
-}
-
-// ParseDocument wraps cmark_parse_document
-// Parse a CommonMark document in 'document' and returns a pointer to a tree of nodes.
-// The returned [cmark.Node] has a finalizer set that will call
-// `cmark_node_free` which will free the memory allocated for the node and any
-// of its children
-func ParseDocument(document string, options ParserOpt) *Node {
-	str := C.CString(document)
-	defer C.free(unsafe.Pointer(str))
-
-	node := &Node{
-		node: C.cmark_parse_document(str, C.size_t(len(document)), C.int(options)),
-	}
-	runtime.SetFinalizer(node, (*Node).free)
-
-	return node
 }
