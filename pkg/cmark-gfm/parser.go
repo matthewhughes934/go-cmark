@@ -65,7 +65,6 @@ const (
 	ParserOptFullInfoString = C.CMARK_OPT_FULL_INFO_STRING
 )
 
-
 type Parser struct {
 	parser *C.cmark_parser
 }
