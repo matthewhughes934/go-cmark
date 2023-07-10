@@ -18,7 +18,7 @@ pushd "$submodule_path"
 # this is a hack!
 # we need the generated files e.g. config.h in the same dir
 # as the .go files for cgo to compile it. But this requires
-# generating this file now. Admittedly there's no much generated her
+# generating this file now. Admittedly there's no much generated here
 # so maybe not a big problem
 make build
 popd
