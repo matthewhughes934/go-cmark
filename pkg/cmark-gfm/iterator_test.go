@@ -1,6 +1,7 @@
 package gfm
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -48,4 +49,35 @@ func TestIterAPI(t *testing.T) {
 	require.Equal(t, EventTypeDone, iter.Next())
 
 	require.Equal(t, iter.GetRoot(), rootNode)
+}
+
+func ExampleIter() {
+	root := ParseDocument("# Document\n\nsome text\n", ParserOptDefault)
+	iter := NewIter(root)
+
+	evType := iter.Next()
+	for ; evType != EventTypeDone; evType = iter.Next() {
+		cur := iter.GetNode()
+		fmt.Print(cur.GetTypeString())
+		switch evType {
+		case EventTypeNone:
+			fmt.Println(" NONE")
+		case EventTypeDone:
+			fmt.Println(" DONE")
+		case EventTypeEnter:
+			fmt.Println(" ENTER")
+		case EventTypeExit:
+			fmt.Println(" EXIT")
+		}
+	}
+
+	// Output:
+	// document ENTER
+	// heading ENTER
+	// text ENTER
+	// heading EXIT
+	// paragraph ENTER
+	// text ENTER
+	// paragraph EXIT
+	// document EXIT
 }
