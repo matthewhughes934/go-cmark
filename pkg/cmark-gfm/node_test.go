@@ -104,6 +104,18 @@ func TestLastChild(t *testing.T) {
 	require.Equal(t, NodeTypeParagraph, lastChild.GetType())
 }
 
+func TestParentFootnoteDef(t *testing.T) {
+	document := ParseDocument("Here's a simple footnote[^1]\n\n[^1]: My Reference\n", ParserOptDefault|ParserOptFootnotes)
+
+	// document->paragraph->text->footnote
+	footnoteRef := document.FirstChild().FirstChild().Next()
+	// document->(2nd)paragraph->footnote
+	footnoteDef := document.FirstChild().Next().FirstChild()
+
+	require.Nil(t, footnoteDef.ParentFootnoteDef())
+	require.Equal(t, footnoteRef.ParentFootnoteDef(), footnoteDef)
+}
+
 func TestNodeNextNoNext(t *testing.T) {
 	document := ParseDocument("", ParserOptDefault)
 	require.NotNil(t, document)

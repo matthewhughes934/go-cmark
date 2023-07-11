@@ -18,16 +18,17 @@ const (
 	NodeTypeNone NodeType = C.CMARK_NODE_NONE
 
 	/* Block */
-	NodeTypeDocument      NodeType = C.CMARK_NODE_DOCUMENT
-	NodeTypeBlockQuote    NodeType = C.CMARK_NODE_BLOCK_QUOTE
-	NodeTypeList          NodeType = C.CMARK_NODE_LIST
-	NodeTypeItem          NodeType = C.CMARK_NODE_ITEM
-	NodeTypeCodeBlock     NodeType = C.CMARK_NODE_CODE_BLOCK
-	NodeTypeHTMLBlock     NodeType = C.CMARK_NODE_HTML_BLOCK
-	NodeTypeCustomBlock   NodeType = C.CMARK_NODE_CUSTOM_BLOCK
-	NodeTypeParagraph     NodeType = C.CMARK_NODE_PARAGRAPH
-	NodeTypeHeading       NodeType = C.CMARK_NODE_HEADING
-	NodeTypeThematicBreak NodeType = C.CMARK_NODE_THEMATIC_BREAK
+	NodeTypeDocument           NodeType = C.CMARK_NODE_DOCUMENT
+	NodeTypeBlockQuote         NodeType = C.CMARK_NODE_BLOCK_QUOTE
+	NodeTypeList               NodeType = C.CMARK_NODE_LIST
+	NodeTypeItem               NodeType = C.CMARK_NODE_ITEM
+	NodeTypeCodeBlock          NodeType = C.CMARK_NODE_CODE_BLOCK
+	NodeTypeHTMLBlock          NodeType = C.CMARK_NODE_HTML_BLOCK
+	NodeTypeCustomBlock        NodeType = C.CMARK_NODE_CUSTOM_BLOCK
+	NodeTypeParagraph          NodeType = C.CMARK_NODE_PARAGRAPH
+	NodeTypeHeading            NodeType = C.CMARK_NODE_HEADING
+	NodeTypeThematicBreak      NodeType = C.CMARK_NODE_THEMATIC_BREAK
+	NoteTypeFootnoteDefinition NodeType = C.CMARK_NODE_FOOTNOTE_DEFINITION
 
 	NodeTypeFirstBlock NodeType = C.CMARK_NODE_DOCUMENT
 	NodeTypeLastBlock  NodeType = C.CMARK_NODE_THEMATIC_BREAK
@@ -203,6 +204,13 @@ func (node *Node) FirstChild() *Node {
 // Returns the last child of 'node', or nil if 'node' has no children.
 func (node *Node) LastChild() *Node {
 	return nodeOrNil(C.cmark_node_last_child(node.node))
+}
+
+// ParentFootnoteDef wraps cmark_node_parent_footnote_def
+// Returns the footnote reference of 'node', or NULL if 'node' doesn't have a
+// footnote reference
+func (node *Node) ParentFootnoteDef() *Node {
+	return nodeOrNil(C.cmark_node_parent_footnote_def(node.node))
 }
 
 // some cmark functions like `cmark_node_get_url` reutrn a `char *` that will
