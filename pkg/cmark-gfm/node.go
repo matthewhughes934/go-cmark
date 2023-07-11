@@ -43,7 +43,7 @@ const (
 	NodeTypeStrong            NodeType = C.CMARK_NODE_STRONG
 	NodeTypeLink              NodeType = C.CMARK_NODE_LINK
 	NodeTypeImage             NodeType = C.CMARK_NODE_IMAGE
-	NodeTypeFootNoteReference NodeType = C.CMARK_NODE_FOOTNOTE_REFERENCE
+	NodeTypeFootnoteReference NodeType = C.CMARK_NODE_FOOTNOTE_REFERENCE
 )
 
 // ListType is cmark_list_type
