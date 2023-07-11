@@ -45,7 +45,7 @@ nodes of type:
   - [NodeTypeCode]
   - [NodeTypeHTMLInline]
 
-Nodes must only be modified after an [EvenTypeExit] event or an
+Nodes must only be modified after an [EventTypeExit] event or an
 [EventTypeEnter] for leaf nodes
 */
 type Iter struct {
