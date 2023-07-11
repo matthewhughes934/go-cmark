@@ -36,14 +36,14 @@ headings into regular paragraphs.
 Iterators will never return [EventTypeExit] events for leaf noes, which are
 nodes of type:
 
-	* [NodeTypeHTMLBlock]
-	* [NodeTypeThematicBreak]
-	* [NodeTypeCodeBlock]
-	* [NodeTypeText]
-	* [NodeTypeSoftbreak]
-	* [NodeTypeLinebreak]
-	* [NodeTypeCode]
-	* [NodeTypeHTMLInline]
+  - [NodeTypeHTMLBlock]
+  - [NodeTypeThematicBreak]
+  - [NodeTypeCodeBlock]
+  - [NodeTypeText]
+  - [NodeTypeSoftbreak]
+  - [NodeTypeLinebreak]
+  - [NodeTypeCode]
+  - [NodeTypeHTMLInline]
 
 Nodes must only be modified after an [EvenTypeExit] event or an
 [EventTypeEnter] for leaf nodes

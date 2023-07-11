@@ -248,6 +248,32 @@ func TestIsTightList(t *testing.T) {
 	}
 }
 
+func TestGetFenceInfoNoInfo(t *testing.T) {
+	document := ParseDocument("No code fence\n", ParserOptDefault)
+
+	content := document.FirstChild()
+	require.NotNil(t, content)
+
+	require.Nil(t, content.GetFenceInfo())
+}
+
+func TestGetFenceInfo(t *testing.T) {
+	for _, tc := range []struct {
+		content  string
+		expected string
+	}{
+		{"```bash\necho 'hello'\n```\n", "bash"},
+		{"~~~python\nprint('hello')\n~~~\n", "python"},
+	} {
+		t.Run(tc.content, func(t *testing.T) {
+			document := ParseDocument(tc.content, ParserOptDefault)
+			fenceNode := document.FirstChild()
+
+			require.Equal(t, *fenceNode.GetFenceInfo(), tc.expected)
+		})
+	}
+}
+
 func TestGetUrlNoUrl(t *testing.T) {
 	document := ParseDocument("No URL here\n", ParserOptDefault)
 

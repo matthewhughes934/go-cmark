@@ -1,7 +1,7 @@
 run:
   tests: true
   skip-dirs:
-    - cmark
+    - "^cmark-.*-src"
 
 linters-settings:
   errcheck:

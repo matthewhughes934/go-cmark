@@ -18,16 +18,17 @@ const (
 	NodeTypeNone NodeType = C.CMARK_NODE_NONE
 
 	/* Block */
-	NodeTypeDocument      NodeType = C.CMARK_NODE_DOCUMENT
-	NodeTypeBlockQuote    NodeType = C.CMARK_NODE_BLOCK_QUOTE
-	NodeTypeList          NodeType = C.CMARK_NODE_LIST
-	NodeTypeItem          NodeType = C.CMARK_NODE_ITEM
-	NodeTypeCodeBlock     NodeType = C.CMARK_NODE_CODE_BLOCK
-	NodeTypeHTMLBlock     NodeType = C.CMARK_NODE_HTML_BLOCK
-	NodeTypeCustomBlock   NodeType = C.CMARK_NODE_CUSTOM_BLOCK
-	NodeTypeParagraph     NodeType = C.CMARK_NODE_PARAGRAPH
-	NodeTypeHeading       NodeType = C.CMARK_NODE_HEADING
-	NodeTypeThematicBreak NodeType = C.CMARK_NODE_THEMATIC_BREAK
+	NodeTypeDocument           NodeType = C.CMARK_NODE_DOCUMENT
+	NodeTypeBlockQuote         NodeType = C.CMARK_NODE_BLOCK_QUOTE
+	NodeTypeList               NodeType = C.CMARK_NODE_LIST
+	NodeTypeItem               NodeType = C.CMARK_NODE_ITEM
+	NodeTypeCodeBlock          NodeType = C.CMARK_NODE_CODE_BLOCK
+	NodeTypeHTMLBlock          NodeType = C.CMARK_NODE_HTML_BLOCK
+	NodeTypeCustomBlock        NodeType = C.CMARK_NODE_CUSTOM_BLOCK
+	NodeTypeParagraph          NodeType = C.CMARK_NODE_PARAGRAPH
+	NodeTypeHeading            NodeType = C.CMARK_NODE_HEADING
+	NodeTypeThematicBreak      NodeType = C.CMARK_NODE_THEMATIC_BREAK
+	NoteTypeFootnoteDefinition NodeType = C.CMARK_NODE_FOOTNOTE_DEFINITION
 
 	NodeTypeFirstBlock NodeType = C.CMARK_NODE_DOCUMENT
 	NodeTypeLastBlock  NodeType = C.CMARK_NODE_THEMATIC_BREAK
@@ -43,7 +44,7 @@ const (
 	NodeTypeStrong            NodeType = C.CMARK_NODE_STRONG
 	NodeTypeLink              NodeType = C.CMARK_NODE_LINK
 	NodeTypeImage             NodeType = C.CMARK_NODE_IMAGE
-	NodeTypeFootNoteReference NodeType = C.CMARK_NODE_FOOTNOTE_REFERENCE
+	NodeTypeFootnoteReference NodeType = C.CMARK_NODE_FOOTNOTE_REFERENCE
 )
 
 // ListType is cmark_list_type
@@ -98,13 +99,7 @@ func (node *Node) GetTypeString() string {
 // string if none is set. Returns nil if called on a
 // node that does not have string content.
 func (node *Node) GetLiteral() *string {
-	literal := C.cmark_node_get_literal(node.node)
-	if literal == nil {
-		return nil
-	}
-
-	str := C.GoString(literal)
-	return &str
+	return stringOrNil(C.cmark_node_get_literal(node.node))
 }
 
 // GetHeadingLevel wraps cmark_node_get_heading_level
@@ -132,18 +127,19 @@ func (node *Node) IsTightList() bool {
 	return C.cmark_node_get_list_tight(node.node) == C.int(1)
 }
 
+// GetFenceInfo wraps cmark_node_get_fence_info
+// Returns the info string from a fenced code block. Returns nil if called on a
+// node that is not a code block
+func (node *Node) GetFenceInfo() *string {
+	return stringOrNil(C.cmark_node_get_fence_info(node.node))
+}
+
 // GetUrl wraps cmark_node_get_url
 // Returns the URL of a link or image 'node', or an empty string
 // if no URL is set.  Returns NULL if called on a node that is
 // not a link or image.
 func (node *Node) GetUrl() *string {
-	literal := C.cmark_node_get_url(node.node)
-	if literal == nil {
-		return nil
-	}
-
-	str := C.GoString(literal)
-	return &str
+	return stringOrNil(C.cmark_node_get_url(node.node))
 }
 
 // GetTitle wraps cmark_node_get_title
@@ -151,13 +147,7 @@ func (node *Node) GetUrl() *string {
 // if no URL is set. Returns nil if called on a node that is not a
 // link or image
 func (node *Node) GetTitle() *string {
-	literal := C.cmark_node_get_title(node.node)
-	if literal == nil {
-		return nil
-	}
-
-	str := C.GoString(literal)
-	return &str
+	return stringOrNil(C.cmark_node_get_title(node.node))
 }
 
 // GetStartLine wraps cmark_node_get_start_line
@@ -188,51 +178,60 @@ func (node *Node) GetEndColumn() int {
 // Returns the next node in the sequence after 'node', or nil if
 // there is none
 func (node *Node) Next() *Node {
-	next := C.cmark_node_next(node.node)
-	if next == nil {
-		return nil
-	}
-	return &Node{node: next}
+	return nodeOrNil(C.cmark_node_next(node.node))
 }
 
 // Previous wraps cmark_node_previous
 // Returns the previous node in the sequence after 'node', or none if
 // there is none
 func (node *Node) Previous() *Node {
-	previous := C.cmark_node_previous(node.node)
-	if previous == nil {
-		return nil
-	}
-	return &Node{node: previous}
+	return nodeOrNil(C.cmark_node_previous(node.node))
 }
 
 // Parent wraps cmark_node_parent
 // Returns the parent of 'node', or nil if there is none.
 func (node *Node) Parent() *Node {
-	parent := C.cmark_node_parent(node.node)
-	if parent == nil {
-		return nil
-	}
-	return &Node{node: parent}
+	return nodeOrNil(C.cmark_node_parent(node.node))
 }
 
 // FirstChild wraps cmark_node_first_child
 // Returns the first child of 'node', or nil if 'node' has no children.
 func (node *Node) FirstChild() *Node {
-	firstChild := C.cmark_node_first_child(node.node)
-	if firstChild == nil {
-		return nil
-	}
-	return &Node{node: firstChild}
+	return nodeOrNil(C.cmark_node_first_child(node.node))
 }
 
 // LastChild wraps cmark_node_last_child
 // Returns the last child of 'node', or nil if 'node' has no children.
 func (node *Node) LastChild() *Node {
-	lastChild := C.cmark_node_last_child(node.node)
-	if lastChild == nil {
+	return nodeOrNil(C.cmark_node_last_child(node.node))
+}
+
+// ParentFootnoteDef wraps cmark_node_parent_footnote_def
+// Returns the footnote reference of 'node', or NULL if 'node' doesn't have a
+// footnote reference
+func (node *Node) ParentFootnoteDef() *Node {
+	return nodeOrNil(C.cmark_node_parent_footnote_def(node.node))
+}
+
+// some cmark functions like `cmark_node_get_url` reutrn a `char *` that will
+// be `NULL` if the relevant data can't be fetch (e.g. if the node doesn't
+// actually contain a URL) this preserves that behaviour
+// this could probably be somewhere shared, but https://github.com/golang/go/issues/13467
+func stringOrNil(s *C.char) *string {
+	if s == nil {
 		return nil
 	}
 
-	return &Node{node: lastChild}
+	str := C.GoString(s)
+	return &str
+}
+
+// similar to above, though can't share because there's no single definition of
+// 'C.cmark_node' between the two libs
+func nodeOrNil(n *C.cmark_node) *Node {
+	if n == nil {
+		return nil
+	}
+
+	return &Node{node: n}
 }

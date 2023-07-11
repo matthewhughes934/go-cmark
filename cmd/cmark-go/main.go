@@ -14,9 +14,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/urfave/cli/v3"
-
 	"github.com/matthewhughes934/go-cmark/pkg/cmark"
+	"github.com/urfave/cli/v3"
 )
 
 func main() { //go-cov:skip

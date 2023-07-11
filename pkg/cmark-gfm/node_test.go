@@ -104,6 +104,18 @@ func TestLastChild(t *testing.T) {
 	require.Equal(t, NodeTypeParagraph, lastChild.GetType())
 }
 
+func TestParentFootnoteDef(t *testing.T) {
+	document := ParseDocument("Here's a simple footnote[^1]\n\n[^1]: My Reference\n", ParserOptDefault|ParserOptFootnotes)
+
+	// document->paragraph->text->footnote
+	footnoteRef := document.FirstChild().FirstChild().Next()
+	// document->(2nd)paragraph->footnote
+	footnoteDef := document.FirstChild().Next().FirstChild()
+
+	require.Nil(t, footnoteDef.ParentFootnoteDef())
+	require.Equal(t, footnoteRef.ParentFootnoteDef(), footnoteDef)
+}
+
 func TestNodeNextNoNext(t *testing.T) {
 	document := ParseDocument("", ParserOptDefault)
 	require.NotNil(t, document)
@@ -242,6 +254,32 @@ func TestIsTightList(t *testing.T) {
 			require.NotNil(t, list)
 
 			require.Equal(t, tc.expected, list.IsTightList())
+		})
+	}
+}
+
+func TestGetFenceInfoNoInfo(t *testing.T) {
+	document := ParseDocument("No code fence\n", ParserOptDefault)
+
+	content := document.FirstChild()
+	require.NotNil(t, content)
+
+	require.Nil(t, content.GetFenceInfo())
+}
+
+func TestGetFenceInfo(t *testing.T) {
+	for _, tc := range []struct {
+		content  string
+		expected string
+	}{
+		{"```bash\necho 'hello'\n```\n", "bash"},
+		{"~~~python\nprint('hello')\n~~~\n", "python"},
+	} {
+		t.Run(tc.content, func(t *testing.T) {
+			document := ParseDocument(tc.content, ParserOptDefault)
+			fenceNode := document.FirstChild()
+
+			require.Equal(t, *fenceNode.GetFenceInfo(), tc.expected)
 		})
 	}
 }
