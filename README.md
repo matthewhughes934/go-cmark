@@ -1,6 +1,7 @@
 # `go-cmark`
 
-![coverage](https://img.shields.io/badge/Coverage-100%25-brightgreen) [![Go
+[![coverage](https://img.shields.io/badge/Coverage-100%25-brightgreen)](https://github.com/matthewhughes934/go-cmark)
+[![Go
 Reference](https://pkg.go.dev/badge/github.com/matthewhughes934/go-cmark.svg)](https://pkg.go.dev/github.com/matthewhughes934/go-cmark)
 
 Go bindings for [`cmark`](https://github.com/commonmark/cmark) and

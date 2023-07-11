@@ -18,6 +18,36 @@ const (
 	EventTypeExit  EventType = C.CMARK_EVENT_EXIT
 )
 
+/*
+Iter wraps cmark_iter
+
+An iterator will walk through a tree of nodes, starting from a root node,
+returning one node at a time, together with information about whether the node
+is being entered or exited. The iterator will first descend to a child node, if
+there is one. When there is no child, the iterator will go to the next sibling.
+When there is no next sibling, the iterator will return to the parent (but with
+a [EventType] of [EventTypeExit]). The iterator will return [EventTypeDone]
+when it reaches the root node again.  One natural application is an HTML
+renderer, where an [EventTypeEnter] event outputs an open tag and an
+[EventTypeExit] event outputs a close tag. An iterator might also be used to
+transform an AST in some systematic way, for example, turning all level-3
+headings into regular paragraphs.
+
+Iterators will never return [EventTypeExit] events for leaf noes, which are
+nodes of type:
+
+	* [NodeTypeHTMLBlock]
+	* [NodeTypeThematicBreak]
+	* [NodeTypeCodeBlock]
+	* [NodeTypeText]
+	* [NodeTypeSoftbreak]
+	* [NodeTypeLinebreak]
+	* [NodeTypeCode]
+	* [NodeTypeHTMLInline]
+
+Nodes must only be modified after an [EvenTypeExit] event or an
+[EventTypeEnter] for leaf nodes
+*/
 type Iter struct {
 	iter *C.cmark_iter
 }
