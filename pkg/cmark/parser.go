@@ -48,7 +48,6 @@ const (
 	ParserOptSmart ParserOpt = C.CMARK_OPT_SMART
 )
 
-
 // free wraps cmark_parser_free
 func (parser *Parser) free() { //go-cov:skip
 	C.cmark_parser_free(parser.parser)

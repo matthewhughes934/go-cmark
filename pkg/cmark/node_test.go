@@ -258,10 +258,10 @@ func TestGetFenceInfoNoInfo(t *testing.T) {
 }
 
 func TestGetFenceInfo(t *testing.T) {
-	for _, tc := range []struct{
-		content string
+	for _, tc := range []struct {
+		content  string
 		expected string
-	} {
+	}{
 		{"```bash\necho 'hello'\n```\n", "bash"},
 		{"~~~python\nprint('hello')\n~~~\n", "python"},
 	} {

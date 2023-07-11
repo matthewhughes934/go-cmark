@@ -20,9 +20,9 @@ func TestRenderCommonMark(t *testing.T) {
 			"# My Document\n\nWith a paragraph\n",
 		},
 		"wraps long lines": {
-			strings.Repeat("a", 10)+" "+strings.Repeat("a", 10)+"\n",
+			strings.Repeat("a", 10) + " " + strings.Repeat("a", 10) + "\n",
 			10,
-			strings.Repeat("a", 10)+"\n"+strings.Repeat("a", 10)+"\n",
+			strings.Repeat("a", 10) + "\n" + strings.Repeat("a", 10) + "\n",
 		},
 		"basic reformat": {
 			"- a dot point\n",
