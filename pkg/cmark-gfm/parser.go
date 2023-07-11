@@ -74,7 +74,7 @@ func (parser *Parser) free() { //go-cov:skip
 	C.cmark_parser_free(parser.parser)
 }
 
-// NewParser wraps cmark_parser_new
+// NewParser wraps cmark_parser_new.
 // Creates a new parser object.
 func NewParser(options ParserOpt) *Parser {
 	parser := &Parser{parser: C.cmark_parser_new(C.int(options))}
@@ -83,7 +83,7 @@ func NewParser(options ParserOpt) *Parser {
 	return parser
 }
 
-// Feed wraps cmark_parser_feed
+// Feed wraps cmark_parser_feed.
 // Feeds a string from 'text' to 'parser'.
 func (parser *Parser) Feed(text string) {
 	Cstr := C.CString(text)
@@ -92,7 +92,7 @@ func (parser *Parser) Feed(text string) {
 	C.cmark_parser_feed(parser.parser, Cstr, C.size_t(len(text)))
 }
 
-// Finish wraps cmark_parser_finish
+// Finish wraps cmark_parser_finish.
 // Finish parsing and return a pointer to a tree of nodes.
 func (parser *Parser) Finish() *Node {
 	return &Node{
@@ -100,8 +100,8 @@ func (parser *Parser) Finish() *Node {
 	}
 }
 
-// ParseDocument wraps cmark_parse_document
-// Parse a CommonMark document in 'document' and returns a pointer to a tree of nodes.
+// ParseDocument wraps cmark_parse_document.
+// Parses a CommonMark document in 'document' and returns a pointer to a tree of nodes.
 // The returned [cmark.Node] has a finalizer set that will call
 // `cmark_node_free` which will free the memory allocated for the node and any
 // of its children

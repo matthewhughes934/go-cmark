@@ -12,7 +12,7 @@ src_sha="$(git submodule status -- "$1" | awk '{print $1}')"
 gen_comment="$0 $* at $src_sha"
 build_dir="$submodule_path/build"
 src_dir="$submodule_path/src"
-license_file="$src_dir/COPYING"
+license_file="$submodule_path/COPYING"
 
 pushd "$submodule_path"
 # this is a hack!

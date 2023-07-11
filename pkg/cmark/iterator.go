@@ -45,14 +45,14 @@ nodes of type:
   - [NodeTypeCode]
   - [NodeTypeHTMLInline]
 
-Nodes must only be modified after an [EvenTypeExit] event or an
+Nodes must only be modified after an [EventTypeExit] event or an
 [EventTypeEnter] for leaf nodes
 */
 type Iter struct {
 	iter *C.cmark_iter
 }
 
-// NewIter wraps cmark_iter_new
+// NewIter wraps cmark_iter_new.
 // Creates a new iterator starting at 'root'.  The current node and event
 // type are undefined until 'cmark_iter_next' is called for the first time.
 func NewIter(root *Node) *Iter {
@@ -61,30 +61,30 @@ func NewIter(root *Node) *Iter {
 	return iter
 }
 
-// free wraps cmark_iter_free
+// free wraps cmark_iter_free.
 func (iter *Iter) free() { //go-cov:skip
 	C.cmark_iter_free(iter.iter)
 }
 
-// Next wraps cmark_iter_next
+// Next wraps cmark_iter_next.
 // Advances to the next node and returns the event type
 func (iter *Iter) Next() EventType {
 	return EventType(C.cmark_iter_next(iter.iter))
 }
 
-// GetNode wraps cmark_iter_get_node
+// GetNode wraps cmark_iter_get_node.
 // Returns the current node.
 func (iter *Iter) GetNode() *Node {
 	return &Node{node: C.cmark_iter_get_node(iter.iter)}
 }
 
-// GetEventType wraps cmark_iter_get_event_type
+// GetEventType wraps cmark_iter_get_event_type.
 // Returns the current event type.
 func (iter *Iter) GetEventType() EventType {
 	return EventType(C.cmark_iter_get_event_type(iter.iter))
 }
 
-// GetRoot  wraps cmark_iter_get_root
+// GetRoot  wraps cmark_iter_get_root.
 // Returns the root node.
 func (iter *Iter) GetRoot() *Node {
 	return &Node{node: C.cmark_iter_get_root(iter.iter)}
