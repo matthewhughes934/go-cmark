@@ -100,13 +100,7 @@ func (node *Node) GetTypeString() string {
 // string if none is set. Returns nil if called on a
 // node that does not have string content.
 func (node *Node) GetLiteral() *string {
-	literal := C.cmark_node_get_literal(node.node)
-	if literal == nil {
-		return nil
-	}
-
-	str := C.GoString(literal)
-	return &str
+	return stringOrNil(C.cmark_node_get_literal(node.node))
 }
 
 // GetHeadingLevel wraps cmark_node_get_heading_level
@@ -139,13 +133,7 @@ func (node *Node) IsTightList() bool {
 // if no URL is set.  Returns NULL if called on a node that is
 // not a link or image.
 func (node *Node) GetUrl() *string {
-	literal := C.cmark_node_get_url(node.node)
-	if literal == nil {
-		return nil
-	}
-
-	str := C.GoString(literal)
-	return &str
+	return stringOrNil(C.cmark_node_get_url(node.node))
 }
 
 // GetTitle wraps cmark_node_get_title
@@ -153,13 +141,7 @@ func (node *Node) GetUrl() *string {
 // if no URL is set. Returns nil if called on a node that is not a
 // link or image
 func (node *Node) GetTitle() *string {
-	literal := C.cmark_node_get_title(node.node)
-	if literal == nil {
-		return nil
-	}
-
-	str := C.GoString(literal)
-	return &str
+	return stringOrNil(C.cmark_node_get_title(node.node))
 }
 
 // GetStartLine wraps cmark_node_get_start_line
@@ -190,51 +172,51 @@ func (node *Node) GetEndColumn() int {
 // Returns the next node in the sequence after 'node', or nil if
 // there is none
 func (node *Node) Next() *Node {
-	next := C.cmark_node_next(node.node)
-	if next == nil {
-		return nil
-	}
-	return &Node{node: next}
+	return nodeOrNil(C.cmark_node_next(node.node))
 }
 
 // Previous wraps cmark_node_previous
 // Returns the previous node in the sequence after 'node', or none if
 // there is none
 func (node *Node) Previous() *Node {
-	previous := C.cmark_node_previous(node.node)
-	if previous == nil {
-		return nil
-	}
-	return &Node{node: previous}
+	return nodeOrNil(C.cmark_node_previous(node.node))
 }
 
 // Parent wraps cmark_node_parent
 // Returns the parent of 'node', or nil if there is none.
 func (node *Node) Parent() *Node {
-	parent := C.cmark_node_parent(node.node)
-	if parent == nil {
-		return nil
-	}
-	return &Node{node: parent}
+	return nodeOrNil(C.cmark_node_parent(node.node))
 }
 
 // FirstChild wraps cmark_node_first_child
 // Returns the first child of 'node', or nil if 'node' has no children.
 func (node *Node) FirstChild() *Node {
-	firstChild := C.cmark_node_first_child(node.node)
-	if firstChild == nil {
-		return nil
-	}
-	return &Node{node: firstChild}
+	return nodeOrNil(C.cmark_node_first_child(node.node))
 }
 
 // LastChild wraps cmark_node_last_child
 // Returns the last child of 'node', or nil if 'node' has no children.
 func (node *Node) LastChild() *Node {
-	lastChild := C.cmark_node_last_child(node.node)
-	if lastChild == nil {
+	return nodeOrNil(C.cmark_node_last_child(node.node))
+}
+
+// some cmark functions like `cmark_node_get_url` reutrn a `char *` that will
+// be `NULL` if the relevant data can't be fetch (e.g. if the node doesn't
+// actually contain a URL) this preserves that behaviour
+// this could probably be somewhere shared, but https://github.com/golang/go/issues/13467
+func stringOrNil(s *C.char) *string {
+	if s == nil {
 		return nil
 	}
 
-	return &Node{node: lastChild}
+	str := C.GoString(s)
+	return &str
+}
+
+func nodeOrNil(n *C.cmark_node) *Node {
+	if n == nil {
+		return nil
+	}
+
+	return &Node{node: n}
 }
