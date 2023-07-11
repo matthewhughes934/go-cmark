@@ -128,6 +128,13 @@ func (node *Node) IsTightList() bool {
 	return C.cmark_node_get_list_tight(node.node) == C.int(1)
 }
 
+// GetFenceInfo wraps cmark_node_get_fence_info
+// Returns the info string from a fenced code block. Returns nil if called on a
+// node that is not a code block
+func (node *Node) GetFenceInfo() *string {
+	return stringOrNil(C.cmark_node_get_fence_info(node.node))
+}
+
 // GetUrl wraps cmark_node_get_url
 // Returns the URL of a link or image 'node', or an empty string
 // if no URL is set.  Returns NULL if called on a node that is
