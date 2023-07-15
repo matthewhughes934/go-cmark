@@ -28,7 +28,7 @@ jobs:
           BEGIN {fail = 0}
           NR > 1 && $NF == 0 { fail = 1; printf("bad line: %s\n", $0) }
           END { if (fail) { exit(1) } }'
-  lint:
+  golangci-lint:
     runs-on: ubuntu-latest
     steps:
       - name: checkout
@@ -39,3 +39,12 @@ jobs:
           cache: false
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v3
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v3
+    - uses: pre-commit/action@v3.0.0
+      env:
+        # run this separately since it handles it's own caching
+        SKIP: golangci-lint
