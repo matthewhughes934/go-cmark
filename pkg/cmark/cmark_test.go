@@ -36,3 +36,12 @@ func TestRenderCommonMark(t *testing.T) {
 		})
 	}
 }
+
+func TestRenderHTML(t *testing.T) {
+	content := "# My document\nWith a paragraph\n"
+	expected := "<h1>My document</h1>\n<p>With a paragraph</p>\n"
+	opts := NewParserOpts()
+	document := ParseDocument(content, NewParserOpts())
+
+	require.Equal(t, expected, RenderHTML(document, opts))
+}

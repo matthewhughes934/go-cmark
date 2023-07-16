@@ -20,3 +20,12 @@ func RenderCommonMark(root *Node, options ParserOpt, width int) string {
 	defer C.free(unsafe.Pointer(cStr))
 	return C.GoString(cStr)
 }
+
+// RenderHTML wraps cmark_render_html.
+// Renders the tree under 'root' as an HTML fragment.
+// It is up to the user to add an appropriate header and footer.
+func RenderHTML(root *Node, options *ParserOpts) string {
+	cStr := C.cmark_render_html(root.node, options.opts)
+	defer C.free(unsafe.Pointer(cStr))
+	return C.GoString(cStr)
+}
