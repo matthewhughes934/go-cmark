@@ -52,8 +52,8 @@ func renderFiles(filenames []string, width int) error {
 		if err != nil {
 			return fmt.Errorf("Failed to read %s: %v", filename, err)
 		}
-		document := cmark.ParseDocument(string(content), cmark.ParserOptDefault)
-		fmt.Print(cmark.RenderCommonMark(document, cmark.ParserOptDefault, width))
+		document := cmark.ParseDocument(string(content), cmark.NewParserOpts())
+		fmt.Print(cmark.RenderCommonMark(document, cmark.NewRenderOpts(), width))
 	}
 	return nil
 }
