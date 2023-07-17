@@ -73,6 +73,11 @@ func TestRenderHTML(t *testing.T) {
 			NewRenderOpts().WithNoBreaks(),
 			"<p>plain paragraph with two lines</p>\n",
 		},
+		{
+			"```python\nprint ('hello, world!)\n```\n",
+			NewRenderOpts().WithGithubPreLang(),
+			`<pre lang="python"><code>print ('hello, world!)` + "\n</code></pre>" + "\n",
+		},
 	} {
 		t.Run(tc.content, func(t *testing.T) {
 			root := ParseDocument(tc.content, ParserOptDefault)

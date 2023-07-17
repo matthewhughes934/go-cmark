@@ -51,6 +51,14 @@ func (o *RenderOpts) WithNoBreaks() *RenderOpts {
 	return o
 }
 
+// WithGithubPreLang maps to C.CMARK_OPT_GITHUB_PRE_LANG
+// Uses GitHub-style <pre lang="x"> tags for code blocks instead of <pre><code
+// class="language-x">.
+func (o *RenderOpts) WithGithubPreLang() *RenderOpts {
+	o.o |= C.CMARK_OPT_GITHUB_PRE_LANG
+	return o
+}
+
 // RenderCommonMark wraps `cmark_render_commonmark`.
 // Returns the tree under `root` rendered as a commonmark document
 func RenderCommonMark(root *Node, opts *RenderOpts, width int) string {
