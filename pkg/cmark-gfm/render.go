@@ -59,6 +59,14 @@ func (o *RenderOpts) WithGithubPreLang() *RenderOpts {
 	return o
 }
 
+// WithFullInfoString maps to C.CMARK_OPT_FULL_INFO_STRING
+// Includes the remainder of the info string in code blocks in
+// a separate attribute.
+func (o *RenderOpts) WithFullInfoString() *RenderOpts {
+	o.o |= C.CMARK_OPT_FULL_INFO_STRING
+	return o
+}
+
 // RenderCommonMark wraps `cmark_render_commonmark`.
 // Returns the tree under `root` rendered as a commonmark document
 func RenderCommonMark(root *Node, opts *RenderOpts, width int) string {

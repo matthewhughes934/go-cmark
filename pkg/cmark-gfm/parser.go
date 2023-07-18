@@ -11,59 +11,36 @@ import (
 	"unsafe"
 )
 
-type ParserOpt int
+// ParserOpts provides options for configuring parsing behaviour
+type ParserOpts struct {
+	o C.int
+}
 
-const (
-	// Default options.
-	ParserOptDefault ParserOpt = C.CMARK_OPT_DEFAULT
+func NewParserOpts() *ParserOpts {
+	return &ParserOpts{o: C.CMARK_OPT_DEFAULT}
+}
 
-	// Include a `data-sourcepos` attribute on all block elements.
-	ParserOptSourcePos ParserOpt = C.CMARK_OPT_SOURCEPOS
+// WithValidateUTF8 maps to C.CMARK_OPT_VALIDATE_UTF8.
+// Validates UTF-8 in the input before parsing, replacing illegal
+// sequences with the replacement character U+FFFD.
+func (o *ParserOpts) WithValidateUTF8() *ParserOpts {
+	o.o |= C.CMARK_OPT_VALIDATE_UTF8
+	return o
+}
 
-	// Render `softbreak` elements as hard line breaks.
-	ParserOptHardBreaks ParserOpt = C.CMARK_OPT_HARDBREAKS
+// WithSmart maps to C.CMARK_OPT_SMART.
+// Converts straight quotes to curly, --- to em dashes, -- to en dashes.
+func (o *ParserOpts) WithSmart() *ParserOpts {
+	o.o |= C.CMARK_OPT_SMART
+	return o
+}
 
-	//  Render raw HTML and unsafe links (`javascript:`, `vbscript:`,
-	// `file:`, and `data:`, except for `image/png`, `image/gif`,
-	// `image/jpeg`, or `image/webp` mime types).  By default,
-	// raw HTML is replaced by a placeholder HTML comment. Unsafe
-	// links are replaced by empty strings.
-	ParserOptUnsafe ParserOpt = C.CMARK_OPT_UNSAFE
-
-	// Render `softbreak` elements as spaces.
-	ParserOptNoBreaks ParserOpt = C.CMARK_OPT_NOBREAKS
-
-	// Legacy option (no effect).
-	ParserOptNormalize ParserOpt = C.CMARK_OPT_NORMALIZE
-
-	//  Validate UTF-8 in the input before parsing, replacing illegal
-	// sequences with the replacement character U+FFFD.
-	ParserOptValidateUTF8 ParserOpt = C.CMARK_OPT_VALIDATE_UTF8
-
-	// Convert straight quotes to curly, --- to em dashes, -- to en dashes.
-	ParserOptSmart ParserOpt = C.CMARK_OPT_SMART
-
-	// Use GitHub-style <pre lang="x"> tags for code blocks instead of <pre><code
-	// class="language-x">.
-	ParserOptGithubPreLang = C.CMARK_OPT_GITHUB_PRE_LANG
-
-	// Be liberal in interpreting inline HTML tags.
-	ParserOptLiberalHTMLTag = C.CMARK_OPT_LIBERAL_HTML_TAG
-
-	// Parse footnotes.
-	ParserOptFootnotes = C.CMARK_OPT_FOOTNOTES
-
-	// Only parse strikethroughs if surrounded by exactly 2 tildes.
-	// Gives some compatibility with redcarpet.
-	ParserOptStrikethroughDoubleTilde = C.CMARK_OPT_STRIKETHROUGH_DOUBLE_TILDE
-
-	// Use style attributes to align table cells instead of align attributes.
-	ParserOptTablePreferStyleAttributes = C.CMARK_OPT_TABLE_PREFER_STYLE_ATTRIBUTES
-
-	// Include the remainder of the info string in code blocks in
-	// a separate attribute.
-	ParserOptFullInfoString = C.CMARK_OPT_FULL_INFO_STRING
-)
+// WithFoonotes maps to c.CMARK_OPT_FOOTNOTES
+// Parses footnotes
+func (o *ParserOpts) WithFoonotes() *ParserOpts {
+	o.o |= C.CMARK_OPT_FOOTNOTES
+	return o
+}
 
 type Parser struct {
 	parser *C.cmark_parser
@@ -76,8 +53,8 @@ func (parser *Parser) free() { //go-cov:skip
 
 // NewParser wraps cmark_parser_new.
 // Creates a new parser object.
-func NewParser(options ParserOpt) *Parser {
-	parser := &Parser{parser: C.cmark_parser_new(C.int(options))}
+func NewParser(opts *ParserOpts) *Parser {
+	parser := &Parser{parser: C.cmark_parser_new(opts.o)}
 	runtime.SetFinalizer(parser, (*Parser).free)
 
 	return parser
@@ -105,12 +82,12 @@ func (parser *Parser) Finish() *Node {
 // The returned [cmark.Node] has a finalizer set that will call
 // `cmark_node_free` which will free the memory allocated for the node and any
 // of its children
-func ParseDocument(document string, options ParserOpt) *Node {
+func ParseDocument(document string, opts *ParserOpts) *Node {
 	str := C.CString(document)
 	defer C.free(unsafe.Pointer(str))
 
 	node := &Node{
-		node: C.cmark_parse_document(str, C.size_t(len(document)), C.int(options)),
+		node: C.cmark_parse_document(str, C.size_t(len(document)), opts.o),
 	}
 	runtime.SetFinalizer(node, (*Node).free)
 

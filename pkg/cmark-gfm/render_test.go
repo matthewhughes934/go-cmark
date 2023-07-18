@@ -31,7 +31,7 @@ func TestRenderCommonMark(t *testing.T) {
 		},
 	} {
 		t.Run(desc, func(t *testing.T) {
-			document := ParseDocument(tc.content, ParserOptDefault)
+			document := ParseDocument(tc.content, NewParserOpts())
 			require.Equal(t, tc.expected, RenderCommonMark(document, NewRenderOpts(), tc.width))
 		})
 	}
@@ -78,9 +78,14 @@ func TestRenderHTML(t *testing.T) {
 			NewRenderOpts().WithGithubPreLang(),
 			`<pre lang="python"><code>print ('hello, world!)` + "\n</code></pre>" + "\n",
 		},
+		{
+			"```python version=3.10\nprint ('hello, world!)\n```\n",
+			NewRenderOpts().WithFullInfoString(),
+			`<pre><code class="language-python" data-meta="version=3.10">print ('hello, world!)` + "\n</code></pre>" + "\n",
+		},
 	} {
 		t.Run(tc.content, func(t *testing.T) {
-			root := ParseDocument(tc.content, ParserOptDefault)
+			root := ParseDocument(tc.content, NewParserOpts())
 
 			require.Equal(t, tc.expected, RenderHTML(root, tc.opts))
 		})
