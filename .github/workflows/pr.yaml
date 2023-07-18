@@ -20,7 +20,7 @@ jobs:
         with:
           go-version: ${{ matrix.go_version }}
       - name: install go-cov
-        run: go install gitlab.com/matthewhughes/go-cov/cmd/go-cov@v0.2.0
+        run: go install gitlab.com/matthewhughes/go-cov/cmd/go-cov
       - name: run tests
         run: |
           go test -coverprofile cov.out ./...
