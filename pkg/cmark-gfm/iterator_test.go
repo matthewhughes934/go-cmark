@@ -8,7 +8,7 @@ import (
 )
 
 func TestIterAPI(t *testing.T) {
-	root := ParseDocument("# heading\n\nparagraph\n", ParserOptDefault)
+	root := ParseDocument("# heading\n\nparagraph\n", NewParserOpts())
 	iter := NewIter(root)
 
 	// step into document
@@ -52,7 +52,7 @@ func TestIterAPI(t *testing.T) {
 }
 
 func ExampleIter() {
-	root := ParseDocument("# Document\n\nsome text\n", ParserOptDefault)
+	root := ParseDocument("# Document\n\nsome text\n", NewParserOpts())
 	iter := NewIter(root)
 
 	evType := iter.Next()
