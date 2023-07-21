@@ -1,21 +1,12 @@
-package gfm
+package cmark
 
 import (
 	"fmt"
-	"os"
-	"testing"
 )
-
-func TestMain(m *testing.M) {
-	CoreExtensionsEnsureRegistered()
-	defer ReleasePlugins()
-
-	os.Exit(m.Run())
-}
 
 func Example() {
 	document := "# My great document\n\nWhat a great read!\n"
-	root := NewParser(NewParserOpts()).ParseDocument(document)
+	root := ParseDocument(document, NewParserOpts())
 
 	heading := root.FirstChild()
 	headingContent := heading.FirstChild()
@@ -39,19 +30,4 @@ func Example() {
 	// paragraph
 	// true
 	// What a great read!
-}
-
-func Example_extensions() {
-	CoreExtensionsEnsureRegistered()
-	document := "# My document\nWith ~~no~~ an extension\n"
-	parser := NewParser(NewParserOpts())
-	parser.AttachSyntaxExtension(FindSyntaxExtension("strikethrough"))
-
-	root := parser.ParseDocument(document)
-
-	fmt.Print(RenderHTML(root, NewRenderOpts(), parser.SyntaxExtensions()))
-
-	// Output:
-	// <h1>My document</h1>
-	// <p>With <del>no</del> an extension</p>
 }

@@ -7,9 +7,6 @@ import (
 )
 
 func TestExtensions(t *testing.T) {
-	CoreExtensionsEnsureRegistered()
-	defer ReleasePlugins()
-
 	for _, tc := range []struct {
 		content       string
 		renderOpts    *RenderOpts
