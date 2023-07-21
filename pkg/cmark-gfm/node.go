@@ -3,6 +3,7 @@ package gfm
 /*
 #include <stdlib.h>
 #include "cmark-gfm.h"
+#include "node.h"
 */
 import "C"
 
