@@ -40,3 +40,18 @@ func Example() {
 	// true
 	// What a great read!
 }
+
+func Example_extensions() {
+	CoreExtensionsEnsureRegistered()
+	document := "# My document\nWith ~~no~~ an extension\n"
+	parser := NewParser(NewParserOpts())
+	parser.AttachSyntaxExtension(FindSyntaxExtension("strikethrough"))
+
+	root := parser.ParseDocument(document)
+
+	fmt.Print(RenderHTML(root, NewRenderOpts(), parser.SyntaxExtensions()))
+
+	// Output:
+	// <h1>My document</h1>
+	// <p>With <del>no</del> an extension</p>
+}
