@@ -3,6 +3,7 @@ package gfm
 /*
 #include <stdlib.h>
 #include "cmark-gfm.h"
+#include "node.h"
 */
 import "C"
 
@@ -28,7 +29,7 @@ const (
 	NodeTypeParagraph          NodeType = C.CMARK_NODE_PARAGRAPH
 	NodeTypeHeading            NodeType = C.CMARK_NODE_HEADING
 	NodeTypeThematicBreak      NodeType = C.CMARK_NODE_THEMATIC_BREAK
-	NoteTypeFootnoteDefinition NodeType = C.CMARK_NODE_FOOTNOTE_DEFINITION
+	NodeTypeFootnoteDefinition NodeType = C.CMARK_NODE_FOOTNOTE_DEFINITION
 
 	NodeTypeFirstBlock NodeType = C.CMARK_NODE_DOCUMENT
 	NodeTypeLastBlock  NodeType = C.CMARK_NODE_THEMATIC_BREAK

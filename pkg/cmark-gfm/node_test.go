@@ -107,11 +107,12 @@ func TestLastChild(t *testing.T) {
 func TestParentFootnoteDef(t *testing.T) {
 	document := ParseDocument("Here's a simple footnote[^1]\n\n[^1]: My Reference\n", NewParserOpts().WithFoonotes())
 
-	// document->paragraph->text->footnote
+	// document->paragraph->text->footnote reference
 	footnoteRef := document.FirstChild().FirstChild().Next()
-	// document->(2nd)paragraph->footnote
-	footnoteDef := document.FirstChild().Next().FirstChild()
+	footnoteDef := document.FirstChild().Next()
 
+	require.Equal(t, footnoteRef.GetType(), NodeTypeFootnoteReference)
+	require.Equal(t, footnoteDef.GetType(), NodeTypeFootnoteDefinition)
 	require.Nil(t, footnoteDef.ParentFootnoteDef())
 	require.Equal(t, footnoteRef.ParentFootnoteDef(), footnoteDef)
 }
