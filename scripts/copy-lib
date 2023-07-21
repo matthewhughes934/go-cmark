@@ -35,13 +35,19 @@ move_file () {
     cat -- "$src_path" >> "$filename"
 }
 
+src_paths=("$build_dir/src" "$src_dir")
+if [[ "$1" =~ "gfm" ]]
+then
+    src_paths+=("$submodule_path/extensions")
+fi
+
 # avoid copying main to avoid: multiple definition of `main'
 while read -r filepath
 do
     filename="$(basename -- "$filepath")"
     move_file "$filepath" "$filename" "$gen_comment"
 done < <(find \
-    "$build_dir/src" "$src_dir" \
+    "${src_paths[@]}" \
     -type f \
     -not -name 'main.c' -a \
     \( -name '*.[ch]' -o -name '*.inc' \) )
