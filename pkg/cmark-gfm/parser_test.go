@@ -52,7 +52,8 @@ func TestParserOpts(t *testing.T) {
 		},
 	} {
 		t.Run(tc.content, func(t *testing.T) {
-			document := ParseDocument(tc.content, tc.opts)
+			parser := NewParser(tc.opts)
+			document := parser.ParseDocument(tc.content)
 			parsedContent := document.FirstChild().FirstChild().GetLiteral()
 			t.Log(RenderHTML(document, NewRenderOpts()))
 

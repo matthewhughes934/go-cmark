@@ -11,7 +11,7 @@ import (
 func TestParseSimpleDocument(t *testing.T) {
 	document := "# My Document\n\nthis is a great document!\n"
 
-	got := ParseDocument(document, NewParserOpts())
+	got := NewParser(NewParserOpts()).ParseDocument(document)
 	require.NotNil(t, got)
 
 	assert.Equal(t, NodeTypeDocument, got.GetType())
@@ -64,7 +64,7 @@ func TestGetLiteralNoContent(t *testing.T) {
 
 func TestGetLiteralWithContent(t *testing.T) {
 	content := "# heading\n"
-	document := ParseDocument(content, NewParserOpts())
+	document := NewParser(NewParserOpts()).ParseDocument(content)
 	require.NotNil(t, document)
 	heading := document.FirstChild()
 	require.NotNil(t, heading)
@@ -75,14 +75,14 @@ func TestGetLiteralWithContent(t *testing.T) {
 }
 
 func TestNodeFirstChildNoChild(t *testing.T) {
-	got := ParseDocument("", NewParserOpts())
+	got := NewParser(NewParserOpts()).ParseDocument("")
 	require.NotNil(t, got)
 
 	assert.Nil(t, got.FirstChild())
 }
 
 func TestNodeFirstChild(t *testing.T) {
-	got := ParseDocument("# heading\n", NewParserOpts())
+	got := NewParser(NewParserOpts()).ParseDocument("# heading\n")
 	require.NotNil(t, got)
 
 	firstChild := got.FirstChild()
@@ -91,13 +91,13 @@ func TestNodeFirstChild(t *testing.T) {
 }
 
 func TestLastChildNoChild(t *testing.T) {
-	document := ParseDocument("", NewParserOpts())
+	document := NewParser(NewParserOpts()).ParseDocument("")
 
 	assert.Nil(t, document.LastChild())
 }
 
 func TestLastChild(t *testing.T) {
-	document := ParseDocument("# heading\n\nparagraph\n", NewParserOpts())
+	document := NewParser(NewParserOpts()).ParseDocument("# heading\n\nparagraph\n")
 
 	lastChild := document.LastChild()
 	require.NotNil(t, lastChild)
@@ -105,7 +105,8 @@ func TestLastChild(t *testing.T) {
 }
 
 func TestParentFootnoteDef(t *testing.T) {
-	document := ParseDocument("Here's a simple footnote[^1]\n\n[^1]: My Reference\n", NewParserOpts().WithFoonotes())
+	document := NewParser(NewParserOpts().WithFoonotes()).
+		ParseDocument("Here's a simple footnote[^1]\n\n[^1]: My Reference\n")
 
 	// document->paragraph->text->footnote reference
 	footnoteRef := document.FirstChild().FirstChild().Next()
@@ -118,14 +119,14 @@ func TestParentFootnoteDef(t *testing.T) {
 }
 
 func TestNodeNextNoNext(t *testing.T) {
-	document := ParseDocument("", NewParserOpts())
+	document := NewParser(NewParserOpts()).ParseDocument("")
 	require.NotNil(t, document)
 
 	assert.Nil(t, document.Next())
 }
 
 func TestNodeNext(t *testing.T) {
-	document := ParseDocument("first paragraph\n\nsecond paragraph\n", NewParserOpts())
+	document := NewParser(NewParserOpts()).ParseDocument("first paragraph\n\nsecond paragraph\n")
 
 	firstParagraph := document.FirstChild()
 	require.Equal(t, NodeTypeParagraph, firstParagraph.GetType())
@@ -137,14 +138,14 @@ func TestNodeNext(t *testing.T) {
 }
 
 func TestNodePreviousNoPrevious(t *testing.T) {
-	document := ParseDocument("", NewParserOpts())
+	document := NewParser(NewParserOpts()).ParseDocument("")
 	require.NotNil(t, document)
 
 	assert.Nil(t, document.Previous())
 }
 
 func TestNodePrevious(t *testing.T) {
-	document := ParseDocument("first paragraph\n\nsecond paragraph\n", NewParserOpts())
+	document := NewParser(NewParserOpts()).ParseDocument("first paragraph\n\nsecond paragraph\n")
 
 	secondParagraph := document.FirstChild().Next()
 	require.Equal(t, NodeTypeParagraph, secondParagraph.GetType())
@@ -156,14 +157,14 @@ func TestNodePrevious(t *testing.T) {
 }
 
 func TestNodeParentNoParent(t *testing.T) {
-	document := ParseDocument("", NewParserOpts())
+	document := NewParser(NewParserOpts()).ParseDocument("")
 	require.NotNil(t, document)
 
 	assert.Nil(t, document.Parent())
 }
 
 func TestNodeParent(t *testing.T) {
-	document := ParseDocument("# heading\n", NewParserOpts())
+	document := NewParser(NewParserOpts()).ParseDocument("# heading\n")
 
 	heading := document.FirstChild()
 	require.NotNil(t, heading)
@@ -174,7 +175,7 @@ func TestNodeParent(t *testing.T) {
 }
 
 func TestGetHeadingLevelNotHeading(t *testing.T) {
-	document := ParseDocument("", NewParserOpts())
+	document := NewParser(NewParserOpts()).ParseDocument("")
 
 	require.Equal(t, 0, document.GetHeadingLevel())
 }
@@ -188,7 +189,7 @@ func TestGetHeadingLevel(t *testing.T) {
 		{"## heading", 2},
 	} {
 		t.Run(tc.heading, func(t *testing.T) {
-			document := ParseDocument(tc.heading+"\n", NewParserOpts())
+			document := NewParser(NewParserOpts()).ParseDocument(tc.heading + "\n")
 
 			heading := document.FirstChild()
 			require.NotNil(t, heading)
@@ -208,7 +209,7 @@ func TestGetListType(t *testing.T) {
 		{"1. foo\n2. bar", TypeOrderedList},
 	} {
 		t.Run(tc.content, func(t *testing.T) {
-			document := ParseDocument(tc.content+"\n", NewParserOpts())
+			document := NewParser(NewParserOpts()).ParseDocument(tc.content + "\n")
 
 			list := document.FirstChild()
 			require.NotNil(t, list)
@@ -229,7 +230,7 @@ func TestGetListStart(t *testing.T) {
 		{"2. foo\n3. bar", 2},
 	} {
 		t.Run(tc.content, func(t *testing.T) {
-			document := ParseDocument(tc.content+"\n", NewParserOpts())
+			document := NewParser(NewParserOpts()).ParseDocument(tc.content + "\n")
 
 			list := document.FirstChild()
 			require.NotNil(t, list)
@@ -249,7 +250,7 @@ func TestIsTightList(t *testing.T) {
 		{"* tight\n*list", true},
 	} {
 		t.Run(tc.content, func(t *testing.T) {
-			document := ParseDocument(tc.content+"\n", NewParserOpts())
+			document := NewParser(NewParserOpts()).ParseDocument(tc.content + "\n")
 
 			list := document.FirstChild()
 			require.NotNil(t, list)
@@ -260,7 +261,7 @@ func TestIsTightList(t *testing.T) {
 }
 
 func TestGetFenceInfoNoInfo(t *testing.T) {
-	document := ParseDocument("No code fence\n", NewParserOpts())
+	document := NewParser(NewParserOpts()).ParseDocument("No code fence\n")
 
 	content := document.FirstChild()
 	require.NotNil(t, content)
@@ -277,7 +278,7 @@ func TestGetFenceInfo(t *testing.T) {
 		{"~~~python\nprint('hello')\n~~~\n", "python"},
 	} {
 		t.Run(tc.content, func(t *testing.T) {
-			document := ParseDocument(tc.content, NewParserOpts())
+			document := NewParser(NewParserOpts()).ParseDocument(tc.content)
 			fenceNode := document.FirstChild()
 
 			require.Equal(t, *fenceNode.GetFenceInfo(), tc.expected)
@@ -286,7 +287,7 @@ func TestGetFenceInfo(t *testing.T) {
 }
 
 func TestGetUrlNoUrl(t *testing.T) {
-	document := ParseDocument("No URL here\n", NewParserOpts())
+	document := NewParser(NewParserOpts()).ParseDocument("No URL here\n")
 
 	content := document.FirstChild()
 	require.NotNil(t, content)
@@ -305,7 +306,7 @@ func TestGetURL(t *testing.T) {
 		{`![alt-name](https://example.com/image.png "some-title")`, "https://example.com/image.png"},
 	} {
 		t.Run(tc.content, func(t *testing.T) {
-			document := ParseDocument(tc.content, NewParserOpts())
+			document := NewParser(NewParserOpts()).ParseDocument(tc.content)
 
 			linkNode := document.FirstChild().FirstChild()
 
@@ -321,7 +322,7 @@ func TestGetTitleNoTitle(t *testing.T) {
 		"* list point",
 	} {
 		t.Run(content, func(t *testing.T) {
-			document := ParseDocument(content, NewParserOpts())
+			document := NewParser(NewParserOpts()).ParseDocument(content)
 
 			linkNode := document.FirstChild().FirstChild()
 
@@ -341,7 +342,7 @@ func TestGetTitle(t *testing.T) {
 		{`![alt-name](https://example.com/image.png "some title")`, "some title"},
 	} {
 		t.Run(tc.content, func(t *testing.T) {
-			document := ParseDocument(tc.content, NewParserOpts())
+			document := NewParser(NewParserOpts()).ParseDocument(tc.content)
 
 			linkNode := document.FirstChild().FirstChild()
 
@@ -353,7 +354,7 @@ func TestGetTitle(t *testing.T) {
 func TestNodePositionFunctions(t *testing.T) {
 	content := "# heading\nparagraph that\nlasts\nseveral\nlines\n"
 
-	document := ParseDocument(content, NewParserOpts())
+	document := NewParser(NewParserOpts()).ParseDocument(content)
 
 	headingNode := document.FirstChild()
 	require.NotNil(t, headingNode)
@@ -373,7 +374,7 @@ func TestNodePositionFunctions(t *testing.T) {
 
 func ExampleParseDocument() {
 	document := "# My great document\n\nWhat a great read!\n"
-	root := ParseDocument(document, NewParserOpts())
+	root := NewParser(NewParserOpts()).ParseDocument(document)
 
 	heading := root.FirstChild()
 	headingContent := heading.FirstChild()
