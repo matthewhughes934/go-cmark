@@ -3,6 +3,8 @@ package gfm
 /*
 #include <stdlib.h>
 #include "cmark-gfm.h"
+#include "cmark-gfm-extension_api.h"
+#include "parser.h"
 */
 import "C"
 
@@ -87,4 +89,16 @@ func (parser *Parser) ParseDocument(document string) *Node {
 	runtime.SetFinalizer(node, (*Node).free)
 
 	return node
+}
+
+// AttachSyntaxExtension wraps cmark_parser_attach_syntax_extension.
+// Attaches the given [SyntaxExtension] to the parser.
+func (parser *Parser) AttachSyntaxExtension(extension *SyntaxExtension) {
+	C.cmark_parser_attach_syntax_extension(parser.parser, extension.ext)
+}
+
+// SyntaxExtensions accesses cmark_parser.syntax_extensions.
+// Returns the [SyntaxExtensionList] attached to the parser.
+func (parser *Parser) SyntaxExtensions() *SyntaxExtensionList {
+	return &SyntaxExtensionList{llist: parser.parser.syntax_extensions}
 }

@@ -1,8 +1,8 @@
 package gfm
 
 /*
-#include "cmark-gfm.h"
 #include <stdlib.h>
+#include "cmark-gfm.h"
 */
 import "C"
 
@@ -78,8 +78,14 @@ func RenderCommonMark(root *Node, opts *RenderOpts, width int) string {
 // RenderHTML wraps cmark_render_html.
 // Renders the tree under 'root' as an HTML fragment.
 // It is up to the user to add an appropriate header and footer.
-func RenderHTML(root *Node, opts *RenderOpts) string {
-	cStr := C.cmark_render_html(root.node, opts.o, nil)
+// If extensionList is not 'nil' then rendering will be done with those
+// extensions
+func RenderHTML(root *Node, opts *RenderOpts, extensionList *SyntaxExtensionList) string {
+	var extList *C.cmark_llist
+	if extensionList != nil {
+		extList = extensionList.llist
+	}
+	cStr := C.cmark_render_html(root.node, opts.o, extList)
 	defer C.free(unsafe.Pointer(cStr))
 	return C.GoString(cStr)
 }

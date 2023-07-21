@@ -87,7 +87,7 @@ func TestRenderHTML(t *testing.T) {
 		t.Run(tc.content, func(t *testing.T) {
 			root := NewParser(NewParserOpts()).ParseDocument(tc.content)
 
-			require.Equal(t, tc.expected, RenderHTML(root, tc.opts))
+			require.Equal(t, tc.expected, RenderHTML(root, tc.opts, nil))
 		})
 	}
 }
