@@ -28,7 +28,7 @@ func CoreExtensionsEnsureRegistered() {
 
 // ReleasePlugins wraps cmark_release_plugins.
 // Frees the memory allocated when registering psyntax extensions.
-func ReleasePlugins() {
+func ReleasePlugins() { //go-cov:skip this is only run at the end of tests
 	C.cmark_release_plugins()
 }
 

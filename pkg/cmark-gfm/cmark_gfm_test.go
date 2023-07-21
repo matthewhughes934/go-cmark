@@ -2,7 +2,16 @@ package gfm
 
 import (
 	"fmt"
+	"os"
+	"testing"
 )
+
+func TestMain(m *testing.M) {
+	CoreExtensionsEnsureRegistered()
+	defer ReleasePlugins()
+
+	os.Exit(m.Run())
+}
 
 func Example() {
 	document := "# My great document\n\nWhat a great read!\n"
