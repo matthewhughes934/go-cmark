@@ -9,7 +9,7 @@ import (
 )
 
 func TestParserAPI(t *testing.T) {
-	parser := NewParser(NewParserOpts())
+	parser := NewParser()
 	document := "# heading\n\nparagraph here\n"
 
 	scanner := bufio.NewScanner(strings.NewReader(document))
@@ -32,27 +32,27 @@ func TestParserAPI(t *testing.T) {
 func TestParserOpts(t *testing.T) {
 	for _, tc := range []struct {
 		content  string
-		opts     *ParserOpts
+		parser   *Parser
 		expected string
 	}{
 		{
 			"plain paragraph",
-			NewParserOpts(),
+			NewParser(),
 			"plain paragraph",
 		},
 		{
 			"bad UTF8: \xFF",
-			NewParserOpts().WithValidateUTF8(),
+			NewParser().WithValidateUTF8(),
 			"bad UTF8: �",
 		},
 		{
 			`text -- "with quotes" ---`,
-			NewParserOpts().WithSmart(),
+			NewParser().WithSmart(),
 			"text – “with quotes” —",
 		},
 	} {
 		t.Run(tc.content, func(t *testing.T) {
-			document := NewParser(tc.opts).ParseDocument(tc.content)
+			document := tc.parser.ParseDocument(tc.content)
 			parsedContent := document.FirstChild().FirstChild().GetLiteral()
 
 			require.NotNil(t, parsedContent)

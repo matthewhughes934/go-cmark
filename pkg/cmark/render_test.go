@@ -31,7 +31,7 @@ func TestRenderCommonMark(t *testing.T) {
 		},
 	} {
 		t.Run(desc, func(t *testing.T) {
-			document := NewParser(NewParserOpts()).ParseDocument(tc.content)
+			document := NewParser().ParseDocument(tc.content)
 			require.Equal(t, tc.expected, RenderCommonMark(document, NewRenderOpts(), tc.width))
 		})
 	}
@@ -75,7 +75,7 @@ func TestRenderHTML(t *testing.T) {
 		},
 	} {
 		t.Run("", func(t *testing.T) {
-			root := NewParser(NewParserOpts()).ParseDocument(tc.content)
+			root := NewParser().ParseDocument(tc.content)
 
 			require.Equal(t, tc.expected, RenderHTML(root, tc.opts))
 		})
