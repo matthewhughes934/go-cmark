@@ -70,18 +70,13 @@ func (parser *Parser) Finish() *Node {
 	}
 }
 
-// ParseDocument wraps cmark_parse_document.
-// Parses a CommonMark document in 'document' and returns a pointer to a tree of nodes.
+// ParseDocument parses a CommonMark document in 'document' and returns a pointer to a tree of nodes.
 // The returned [cmark.Node] has a finalizer set that will call
 // `cmark_node_free` which will free the memory allocated for the node and any
 // of its children
-func ParseDocument(document string, opts *ParserOpts) *Node {
-	str := C.CString(document)
-	defer C.free(unsafe.Pointer(str))
-
-	node := &Node{
-		node: C.cmark_parse_document(str, C.size_t(len(document)), opts.o),
-	}
+func (parser *Parser) ParseDocument(document string) *Node {
+	parser.Feed(document)
+	node := parser.Finish()
 	runtime.SetFinalizer(node, (*Node).free)
 
 	return node

@@ -52,7 +52,7 @@ func TestParserOpts(t *testing.T) {
 		},
 	} {
 		t.Run(tc.content, func(t *testing.T) {
-			document := ParseDocument(tc.content, tc.opts)
+			document := NewParser(tc.opts).ParseDocument(tc.content)
 			parsedContent := document.FirstChild().FirstChild().GetLiteral()
 
 			require.NotNil(t, parsedContent)
