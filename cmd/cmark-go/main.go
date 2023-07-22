@@ -1,5 +1,5 @@
 /*
-cmark-go renders files as common mark via [cmark.ParseDocument]
+cmark-go renders files as common mark via [cmark.Parser.ParseDocument]
 
 if no files are provided STDIN is read
 
