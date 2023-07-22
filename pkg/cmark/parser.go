@@ -3,6 +3,7 @@ package cmark
 /*
 #include "cmark.h"
 #include <stdlib.h>
+#include "parser.h"
 */
 import "C"
 
@@ -15,28 +16,19 @@ type Parser struct {
 	parser *C.cmark_parser
 }
 
-// ParserOpts provides options for configuring parsing behaviour
-type ParserOpts struct {
-	o C.int
-}
-
-func NewParserOpts() *ParserOpts {
-	return &ParserOpts{o: C.CMARK_OPT_DEFAULT}
-}
-
 // WithValidateUTF8 maps to C.CMARK_OPT_VALIDATE_UTF8.
 // Validates UTF-8 in the input before parsing, replacing illegal
 // sequences with the replacement character U+FFFD.
-func (o *ParserOpts) WithValidateUTF8() *ParserOpts {
-	o.o |= C.CMARK_OPT_VALIDATE_UTF8
-	return o
+func (p *Parser) WithValidateUTF8() *Parser {
+	p.parser.options |= C.CMARK_OPT_VALIDATE_UTF8
+	return p
 }
 
 // WithSmart maps to C.CMARK_OPT_SMART.
 // Converts straight quotes to curly, --- to em dashes, -- to en dashes.
-func (o *ParserOpts) WithSmart() *ParserOpts {
-	o.o |= C.CMARK_OPT_SMART
-	return o
+func (p *Parser) WithSmart() *Parser {
+	p.parser.options |= C.CMARK_OPT_SMART
+	return p
 }
 
 // free wraps cmark_parser_free
@@ -46,8 +38,8 @@ func (parser *Parser) free() { //go-cov:skip
 
 // NewParser wraps cmark_parser_new.
 // Creates a new parser object.
-func NewParser(opts *ParserOpts) *Parser {
-	parser := &Parser{parser: C.cmark_parser_new(opts.o)}
+func NewParser() *Parser {
+	parser := &Parser{parser: C.cmark_parser_new(C.CMARK_OPT_DEFAULT)}
 	runtime.SetFinalizer(parser, (*Parser).free)
 
 	return parser

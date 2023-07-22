@@ -15,7 +15,7 @@ func TestMain(m *testing.M) {
 
 func Example() {
 	document := "# My great document\n\nWhat a great read!\n"
-	root := NewParser(NewParserOpts()).ParseDocument(document)
+	root := NewParser().ParseDocument(document)
 
 	heading := root.FirstChild()
 	headingContent := heading.FirstChild()
@@ -44,7 +44,7 @@ func Example() {
 func Example_extensions() {
 	CoreExtensionsEnsureRegistered()
 	document := "# My document\nWith ~~no~~ an extension\n"
-	parser := NewParser(NewParserOpts())
+	parser := NewParser()
 	parser.AttachSyntaxExtension(FindSyntaxExtension("strikethrough"))
 
 	root := parser.ParseDocument(document)

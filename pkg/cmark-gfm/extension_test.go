@@ -47,7 +47,7 @@ func TestExtensions(t *testing.T) {
 		},
 	} {
 		t.Run(tc.extensionName, func(t *testing.T) {
-			parser := NewParser(NewParserOpts())
+			parser := NewParser()
 			extension := FindSyntaxExtension(tc.extensionName)
 			require.NotNilf(t, extension, "Failed to find extension: %s", tc.extensionName)
 			parser.AttachSyntaxExtension(extension)
