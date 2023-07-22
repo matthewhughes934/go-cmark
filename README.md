@@ -6,5 +6,5 @@ Reference](https://pkg.go.dev/badge/github.com/matthewhughes934/go-cmark.svg)](h
 [![Pipeline
 Statues](https://github.com/matthewhughes934/go-cmark/actions/workflows/pr.yaml/badge.svg?branch=main)](https://github.com/matthewhughes934/go-cmark)
 
-Go bindings for [`cmark`](https://github.com/commonmark/cmark) and
+Go wrapper for [`cmark`](https://github.com/commonmark/cmark) and
 [`cmark-gfm`](https://github.com/github/cmark-gfm)
