@@ -6,7 +6,7 @@ import (
 
 func Example() {
 	document := "# My great document\n\nWhat a great read!\n"
-	root := ParseDocument(document, NewParserOpts())
+	root := NewParser(NewParserOpts()).ParseDocument(document)
 
 	heading := root.FirstChild()
 	headingContent := heading.FirstChild()
