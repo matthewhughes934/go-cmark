@@ -53,7 +53,11 @@ func TestExtensions(t *testing.T) {
 			parser.AttachSyntaxExtension(extension)
 			document := parser.ParseDocument(tc.content)
 
-			require.Equal(t, tc.expected, RenderHTML(document, tc.renderOpts, parser.SyntaxExtensions()))
+			require.Equal(
+				t,
+				tc.expected,
+				RenderHTML(document, tc.renderOpts, parser.SyntaxExtensions()),
+			)
 		})
 	}
 }
