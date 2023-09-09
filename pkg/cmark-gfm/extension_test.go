@@ -47,9 +47,8 @@ func TestExtensions(t *testing.T) {
 		},
 	} {
 		t.Run(string(tc.extensionName), func(t *testing.T) {
-			parser := NewParser()
 			extension := FindSyntaxExtension(tc.extensionName)
-			parser.AttachSyntaxExtension(extension)
+			parser := NewParser().WithSyntaxExtension(extension)
 			document := parser.ParseDocument(tc.content)
 
 			require.Equal(

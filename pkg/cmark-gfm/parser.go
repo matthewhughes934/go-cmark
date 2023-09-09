@@ -39,6 +39,13 @@ func (p *Parser) WithFoonotes() *Parser {
 	return p
 }
 
+// WithSyntaxExtension wraps cmark_parser_attach_syntax_extension.
+// Attaches the given [SyntaxExtension] to the parser.
+func (p *Parser) WithSyntaxExtension(extension *SyntaxExtension) *Parser {
+	C.cmark_parser_attach_syntax_extension(p.parser, extension.ext)
+	return p
+}
+
 // free wraps cmark_parser_free
 func (parser *Parser) free() { //go-cov:skip
 	C.cmark_parser_free(parser.parser)
@@ -80,12 +87,6 @@ func (parser *Parser) ParseDocument(document string) *Node {
 	runtime.SetFinalizer(node, (*Node).free)
 
 	return node
-}
-
-// AttachSyntaxExtension wraps cmark_parser_attach_syntax_extension.
-// Attaches the given [SyntaxExtension] to the parser.
-func (parser *Parser) AttachSyntaxExtension(extension *SyntaxExtension) {
-	C.cmark_parser_attach_syntax_extension(parser.parser, extension.ext)
 }
 
 // SyntaxExtensions accesses cmark_parser.syntax_extensions.
