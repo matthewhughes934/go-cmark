@@ -11,7 +11,18 @@ package gfm
 import "C"
 
 import (
+	"fmt"
 	"unsafe"
+)
+
+type ExtensionName string
+
+const (
+	Table         ExtensionName = "table"
+	Strikethrough ExtensionName = "strikethrough"
+	AutoLink      ExtensionName = "autolink"
+	Tagfilter     ExtensionName = "tagfilter"
+	Tasklist      ExtensionName = "tasklist"
 )
 
 // CoreExtensionsEnsureRegistered wraps
@@ -41,14 +52,25 @@ type SyntaxExtensionList struct {
 }
 
 // FindSyntaxExtension wraps cmark_find_syntax_extension.
-// Finds the syntax extension with the given name, or 'nil' if not such extension is registered
-func FindSyntaxExtension(name string) *SyntaxExtension {
-	cs := C.CString(name)
+// Finds the syntax extension with the given name.
+// Panics if extensions have not been registered via
+// [CoreExtensionsEnsureRegistered]
+func FindSyntaxExtension(name ExtensionName) *SyntaxExtension {
+	cs := C.CString(string(name))
 	defer C.free(unsafe.Pointer(cs))
 
 	ext := C.cmark_find_syntax_extension(cs)
-	if ext == nil {
-		return nil
+	// testing this requires more complicated extension registering logic for
+	// testing, rather than just registering things at the global level
+	// and I'm not bothering wit that for the moment
+	if ext == nil { //go-cov:skip
+		panic(
+			fmt.Sprintf(
+				"Could not find extension %s. Has CoreExtensionsEnsureRegistered been called?",
+				name,
+			),
+		)
 	}
+
 	return &SyntaxExtension{ext: ext}
 }
