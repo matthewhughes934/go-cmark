@@ -45,7 +45,7 @@ func Example_extensions() {
 	CoreExtensionsEnsureRegistered()
 	document := "# My document\nWith ~~no~~ an extension\n"
 	parser := NewParser()
-	parser.AttachSyntaxExtension(FindSyntaxExtension("strikethrough"))
+	parser.AttachSyntaxExtension(FindSyntaxExtension(Strikethrough))
 
 	root := parser.ParseDocument(document)
 

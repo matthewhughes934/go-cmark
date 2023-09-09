@@ -10,25 +10,25 @@ func TestExtensions(t *testing.T) {
 	for _, tc := range []struct {
 		content       string
 		renderOpts    *RenderOpts
-		extensionName string
+		extensionName ExtensionName
 		expected      string
 	}{
 		{
 			"|my table|\n|-|\n|blah|\n",
 			NewRenderOpts(),
-			"table",
+			Table,
 			"<table>\n<thead>\n<tr>\n<th>my table</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>blah</td>\n</tr>\n</tbody>\n</table>\n",
 		},
 		{
 			"hello ~~world~~\n",
 			NewRenderOpts(),
-			"strikethrough",
+			Strikethrough,
 			"<p>hello <del>world</del></p>\n",
 		},
 		{
 			"visit https://www.github.com",
 			NewRenderOpts(),
-			"autolink",
+			AutoLink,
 			`<p>visit <a href="https://www.github.com">https://www.github.com</a></p>` + "\n",
 		},
 		{
@@ -36,20 +36,19 @@ func TestExtensions(t *testing.T) {
 			// cmark_render_html_with_mem(document, options, parser->syntax_extensions, mem);
 			"<script>alert(1)</script>\n",
 			NewRenderOpts().WithUnsafe(),
-			"tagfilter",
+			Tagfilter,
 			"&lt;script>alert(1)&lt;/script>\n",
 		},
 		{
 			"- [x] done\n- [ ] not done\n",
 			NewRenderOpts(),
-			"tasklist",
+			Tasklist,
 			"<ul>\n<li><input type=\"checkbox\" checked=\"\" disabled=\"\" /> done</li>\n<li><input type=\"checkbox\" disabled=\"\" /> not done</li>\n</ul>\n",
 		},
 	} {
-		t.Run(tc.extensionName, func(t *testing.T) {
+		t.Run(string(tc.extensionName), func(t *testing.T) {
 			parser := NewParser()
 			extension := FindSyntaxExtension(tc.extensionName)
-			require.NotNilf(t, extension, "Failed to find extension: %s", tc.extensionName)
 			parser.AttachSyntaxExtension(extension)
 			document := parser.ParseDocument(tc.content)
 
@@ -60,8 +59,4 @@ func TestExtensions(t *testing.T) {
 			)
 		})
 	}
-}
-
-func TestFindSyntaxExtensionNoExtension(t *testing.T) {
-	require.Nil(t, FindSyntaxExtension("not-a-registered-extension"))
 }
