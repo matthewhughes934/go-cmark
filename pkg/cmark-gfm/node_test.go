@@ -58,7 +58,7 @@ func TestNodeType(t *testing.T) {
 func TestGetLiteralNoContent(t *testing.T) {
 	node := NewNode(NodeTypeNone)
 
-	assert.Nil(t, node.GetLiteral())
+	assert.Equal(t, "", node.GetLiteral())
 }
 
 func TestGetLiteralWithContent(t *testing.T) {
@@ -70,7 +70,7 @@ func TestGetLiteralWithContent(t *testing.T) {
 
 	headingText := heading.FirstChild()
 	require.NotNil(t, headingText)
-	assert.Equal(t, "heading", *headingText.GetLiteral())
+	assert.Equal(t, "heading", headingText.GetLiteral())
 }
 
 func TestNodeFirstChildNoChild(t *testing.T) {
@@ -265,7 +265,7 @@ func TestGetFenceInfoNoInfo(t *testing.T) {
 	content := document.FirstChild()
 	require.NotNil(t, content)
 
-	require.Nil(t, content.GetFenceInfo())
+	require.Equal(t, "", content.GetFenceInfo())
 }
 
 func TestGetFenceInfo(t *testing.T) {
@@ -280,7 +280,7 @@ func TestGetFenceInfo(t *testing.T) {
 			document := NewParser().ParseDocument(tc.content)
 			fenceNode := document.FirstChild()
 
-			require.Equal(t, *fenceNode.GetFenceInfo(), tc.expected)
+			require.Equal(t, fenceNode.GetFenceInfo(), tc.expected)
 		})
 	}
 }
@@ -291,7 +291,7 @@ func TestGetUrlNoUrl(t *testing.T) {
 	content := document.FirstChild()
 	require.NotNil(t, content)
 
-	require.Nil(t, content.GetUrl())
+	require.Equal(t, "", content.GetUrl())
 }
 
 func TestGetURL(t *testing.T) {
@@ -309,7 +309,7 @@ func TestGetURL(t *testing.T) {
 
 			linkNode := document.FirstChild().FirstChild()
 
-			require.Equal(t, tc.expected, *linkNode.GetUrl())
+			require.Equal(t, tc.expected, linkNode.GetUrl())
 		})
 	}
 }
@@ -325,7 +325,7 @@ func TestGetTitleNoTitle(t *testing.T) {
 
 			linkNode := document.FirstChild().FirstChild()
 
-			require.Nil(t, linkNode.GetTitle())
+			require.Equal(t, "", linkNode.GetTitle())
 		})
 	}
 }
@@ -345,7 +345,7 @@ func TestGetTitle(t *testing.T) {
 
 			linkNode := document.FirstChild().FirstChild()
 
-			require.Equal(t, tc.expected, *linkNode.GetTitle())
+			require.Equal(t, tc.expected, linkNode.GetTitle())
 		})
 	}
 }

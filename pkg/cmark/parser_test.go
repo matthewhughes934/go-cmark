@@ -56,7 +56,7 @@ func TestParserOpts(t *testing.T) {
 			parsedContent := document.FirstChild().FirstChild().GetLiteral()
 
 			require.NotNil(t, parsedContent)
-			require.Equal(t, tc.expected, *parsedContent)
+			require.Equal(t, tc.expected, parsedContent)
 		})
 	}
 }

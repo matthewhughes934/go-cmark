@@ -101,8 +101,8 @@ func (node *Node) GetTypeString() string {
 // Returns a pointer to the string contents of 'node', or an empty
 // string if none is set. Returns nil if called on a
 // node that does not have string content.
-func (node *Node) GetLiteral() *string {
-	return stringOrNil(C.cmark_node_get_literal(node.node))
+func (node *Node) GetLiteral() string {
+	return C.GoString(C.cmark_node_get_literal(node.node))
 }
 
 // GetHeadingLevel wraps cmark_node_get_heading_level.
@@ -133,24 +133,24 @@ func (node *Node) IsTightList() bool {
 // GetFenceInfo wraps cmark_node_get_fence_info.
 // Returns the info string from a fenced code block.
 // Returns nil if called on a node that is not a code block
-func (node *Node) GetFenceInfo() *string {
-	return stringOrNil(C.cmark_node_get_fence_info(node.node))
+func (node *Node) GetFenceInfo() string {
+	return C.GoString(C.cmark_node_get_fence_info(node.node))
 }
 
 // GetUrl wraps cmark_node_get_url.
 // Returns the URL of a link or image 'node', or an empty string
 // if no URL is set.  Returns NULL if called on a node that is
 // not a link or image.
-func (node *Node) GetUrl() *string {
-	return stringOrNil(C.cmark_node_get_url(node.node))
+func (node *Node) GetUrl() string {
+	return C.GoString(C.cmark_node_get_url(node.node))
 }
 
 // GetTitle wraps cmark_node_get_title.
 // returns the title of a link or image 'node', or an empty string
 // if no URL is set. Returns nil if called on a node that is not a
 // link or image
-func (node *Node) GetTitle() *string {
-	return stringOrNil(C.cmark_node_get_title(node.node))
+func (node *Node) GetTitle() string {
+	return C.GoString(C.cmark_node_get_title(node.node))
 }
 
 // GetStartLine wraps cmark_node_get_start_line.
@@ -216,21 +216,6 @@ func (node *Node) ParentFootnoteDef() *Node {
 	return nodeOrNil(C.cmark_node_parent_footnote_def(node.node))
 }
 
-// some cmark functions like `cmark_node_get_url` reutrn a `char *` that will
-// be `NULL` if the relevant data can't be fetch (e.g. if the node doesn't
-// actually contain a URL) this preserves that behaviour
-// this could probably be somewhere shared, but https://github.com/golang/go/issues/13467
-func stringOrNil(s *C.char) *string {
-	if s == nil {
-		return nil
-	}
-
-	str := C.GoString(s)
-	return &str
-}
-
-// similar to above, though can't share because there's no single definition of
-// 'C.cmark_node' between the two libs
 func nodeOrNil(n *C.cmark_node) *Node {
 	if n == nil {
 		return nil
