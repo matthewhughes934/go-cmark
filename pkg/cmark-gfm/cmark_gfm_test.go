@@ -7,6 +7,7 @@ import (
 )
 
 func TestMain(m *testing.M) {
+	// setup/teardown of extensions for entire test run
 	CoreExtensionsEnsureRegistered()
 	defer ReleasePlugins()
 
@@ -42,7 +43,9 @@ func Example() {
 }
 
 func Example_extensions() {
-	CoreExtensionsEnsureRegistered()
+	// commented out since these are handled separately in the test suite
+	// CoreExtensionsEnsureRegistered()
+	// defer ReleasePlugins()
 	document := "# My document\nWith ~~no~~ an extension\n"
 	parser := NewParser().WithSyntaxExtension(FindSyntaxExtension(Strikethrough))
 
