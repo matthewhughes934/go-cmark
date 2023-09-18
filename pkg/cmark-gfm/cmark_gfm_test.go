@@ -26,10 +26,10 @@ func Example() {
 	fmt.Println(root.GetTypeString())
 	fmt.Println(heading.GetTypeString())
 	fmt.Println(headingContent.GetType() == NodeTypeText)
-	fmt.Println(*headingContent.GetLiteral())
+	fmt.Println(headingContent.GetLiteral())
 	fmt.Println(paragraph.GetTypeString())
 	fmt.Println(paragraphContent.GetType() == NodeTypeText)
-	fmt.Println(*paragraphContent.GetLiteral())
+	fmt.Println(paragraphContent.GetLiteral())
 
 	// Output:
 	// document

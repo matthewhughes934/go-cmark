@@ -57,7 +57,7 @@ func TestParserOpts(t *testing.T) {
 			t.Log(RenderHTML(document, NewRenderOpts(), nil))
 
 			require.NotNil(t, parsedContent)
-			require.Equal(t, tc.expected, *parsedContent)
+			require.Equal(t, tc.expected, parsedContent)
 		})
 	}
 }

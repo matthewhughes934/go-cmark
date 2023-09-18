@@ -47,10 +47,10 @@ func dumpTree(node *cmark.Node, indentLevel int) {
 	}
 	fmt.Print(indentStr)
 
-	if nodeContent := node.GetLiteral(); nodeContent == nil {
+	if nodeContent := node.GetLiteral(); nodeContent == "" {
 		fmt.Printf("(%s)", node.GetTypeString())
 	} else {
-		fmt.Printf("(%s: '%s')", node.GetTypeString(), *nodeContent)
+		fmt.Printf("(%s: '%s')", node.GetTypeString(), nodeContent)
 	}
 
 	fmt.Println()
