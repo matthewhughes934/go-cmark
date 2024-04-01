@@ -5,6 +5,7 @@ set -o errexit -o nounset -o pipefail
 if [ $# -ne 1 ]
 then
     echo "usage: $0 <path-to-submodule>"
+    exit 1
 fi
 
 submodule_path="$1"
