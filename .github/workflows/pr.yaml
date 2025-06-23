@@ -24,19 +24,14 @@ jobs:
         uses: actions/setup-go@v4
         with:
           go-version: ${{ matrix.go_version }}
-      - name: install go-cov
-        run: go install gitlab.com/matthewhughes/go-cov/cmd/go-cov
       - name: run tests
         run: |
-          go test -coverprofile cov.out ./...
-          go-cov cov.out > go-cov.out
+          go test -race -coverprofile cov.out ./...
       - name: check coverage
         shell: bash
-        run: >
-          awk '
-          BEGIN {fail = 0}
-          NR > 1 && $NF == 0 { fail = 1; printf("bad line: %s\n", $0) }
-          END { if (fail) { exit(1) } }' go-cov.out
+        run: |-
+          go run gitlab.com/matthewhughes/go-cov/cmd/go-cov add-skips cov.out > coverage.out
+          go run gitlab.com/matthewhughes/go-cov/cmd/go-cov report --fail-under 100 coverage.out
   pre-commit:
     runs-on: ubuntu-latest
     steps:
