@@ -3,7 +3,7 @@ module github.com/matthewhughes934/go-cmark
 go 1.20
 
 require (
-	github.com/stretchr/testify v1.8.4
+	github.com/stretchr/testify v1.10.0
 	github.com/urfave/cli/v3 v3.0.0-alpha4
 	gitlab.com/matthewhughes/go-cov v0.2.0
 )
